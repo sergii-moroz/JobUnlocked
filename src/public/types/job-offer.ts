@@ -11,6 +11,7 @@ export interface JobOffer {
 	location: string;
 	salary: number;
 	company: string;
-	createdAt: Date;
-	updatedAt: Date;
+	approval_date: Date;
+	created_at: Date;
+	updated_at: Date;
 }
