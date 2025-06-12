@@ -1,6 +1,5 @@
 import { db } from "../db/connections.js"
-import { JobOfferRequest } from "../public/types/job-offer.js"
-import { jobStatus } from "../types/jobOffers.types.js"
+import { jobStatus } from "../public/types/jobOffers.types.js"
 
 interface JobOffersProps {
 	id: string,
@@ -61,19 +60,4 @@ export const getJobOffersPaginated = async (
 			}
 		)
 	})
-}
-
-export const addJobOffer = async (jobOffer: JobOfferRequest, user_id: string): Promise<void> => {
-	const id = crypto.randomUUID()
-	
-	return new Promise((resolve, reject) => {
-		db.run(
-			`INSERT INTO jobPosts (id, partner_id, title, description, requirements, location, type, job_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-			[id, user_id, jobOffer.title, jobOffer.description, jobOffer.requirements, jobOffer.location, jobOffer.type, jobStatus.draft],
-			function (err) {
-				if (err) return reject(err);
-				resolve();
-			}
-		);
-	});
 }
