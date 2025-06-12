@@ -9,13 +9,7 @@ export async function up() {
 				password: 'password',
 				email: 'olanokhi@email.com',
 				role: 1,
-			},
-			{
-				username: 'tecker',
-				password: 'password',
-				email: 'tecker@email.com',
-				role: 1,
-			},
+			}
 		];
 
 		db.serialize(() => {
