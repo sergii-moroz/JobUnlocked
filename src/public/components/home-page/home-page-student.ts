@@ -1,6 +1,7 @@
 import { API } from "../../api.js"
 import { JobOffer } from "../../types/job-offer.js"
 import { JobType } from "../../types/enums.js"
+import { jobStatus } from "../../types/jobOffers.types.js";
 
 export class HomePageStudent extends HTMLElement {
 	private JobList: Array<JobOffer>;
@@ -83,7 +84,7 @@ export class HomePageStudent extends HTMLElement {
 
 	async loadJobList() {
 		try {
-			const data = await API.getJobList();
+			const data = await API.getJobList(1, 20, jobStatus.draft);
 			if (!data.data) throw Error(`fetching job offers failed: ${data.data}`);
 			this.JobList = data.data;
 			this.populateJobList();

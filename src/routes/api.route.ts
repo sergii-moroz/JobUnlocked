@@ -17,9 +17,4 @@ export const apiRoutes = async (app: FastifyInstance, opts: FastifyPluginOptions
 		handler: handleGetJobs
 	})
 
-	// app.get('/student/jobs', {
-	// 	preHandler: [authenticate],
-	// 	handler: handleGetJobOffersForStudents
-	// })
-
 }
