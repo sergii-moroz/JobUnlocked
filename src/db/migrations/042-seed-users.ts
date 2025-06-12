@@ -16,12 +16,6 @@ export async function up() {
 				email: 'tecker@email.com',
 				role: 1,
 			},
-			{
-				username: 'dolifero',
-				password: 'password',
-				email: 'dolifero@email.com',
-				role: 1,
-			},
 		];
 
 		db.serialize(() => {

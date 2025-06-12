@@ -103,4 +103,32 @@
 			rounded-md px-5 py-2.5 text-center
 			dark:bg-primary/10 dark:border-gray-700
 	}
+
+	.tw-bg-blurred {
+		@apply fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden;
+	}
+
+	.tw-list-entry {
+		@apply bg-white rounded-xl overflow-hidden
+			dark:bg-gray-800 dark:border-gray-700
+			hover:bg-gray-100 dark:hover:bg-gray-700
+	}
+
+	.tw-list-entry h2 {
+		@apply text-xl font-bold text-gray-900 dark:text-white;
+	}
+
+	.tw-list-entry p {
+		@apply text-base text-gray-700 dark:text-gray-300;
+	}
+
+	#jobList,
+	#jobDetails {
+		scrollbar-width: none; /* Firefox */
+		-ms-overflow-style: none; /* IE and Edge */
+	}
+	#jobList::-webkit-scrollbar,
+	#jobDetails::-webkit-scrollbar {
+		display: none; /* Chrome, Safari, Opera */
+	}
 }

@@ -154,10 +154,10 @@ export class API {
 		return response
 	}
 
-	static async getJobs() {
-		const response = await this.get('/api/jobs')
-		return response
-	}
+	static async getJobList() {
+		const response = await this.get('/api/jobs');
+		return response;
+  }
 
 	// static async getAllJobOffersForStudents(){
 	// 	const response = await this.get('/api/student/jobs/all')
