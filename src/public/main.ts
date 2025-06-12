@@ -26,7 +26,9 @@ import { HomePage } from "./components/home-page/home-page.js";
 // import { IconUserRound } from "./components/icons/icon-user-round.js";
 import { LoginForm } from "./components/login-form.js";
 import { ModalLoginMenu } from "./components/modal-login-menu.js";
+import { JobOfferForm } from "./components/newJobOffer.js";
 import { RegisterForm } from "./components/register-form.js";
+import { ApplicationForm } from "./components/student-application.js";
 // import { WaitingRoom } from "./components/waiting-room.js";
 // import { GameRoom } from "./components/game.js";
 // import { TournamentList } from "./components/tournament-list.js";
@@ -88,5 +90,7 @@ customElements.define('home-header', HomeHeader);
 // // Tournament
 // customElements.define('tournament-list', TournamentList)
 // customElements.define('tournament-room', Tournament)
+customElements.define('application-form', ApplicationForm);
+customElements.define('job-offer-form', JobOfferForm);
 
 Router.init()
