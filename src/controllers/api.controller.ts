@@ -25,7 +25,7 @@ export const handleGetJobs = async (
 		console.log("handleGetJobOffers")
 		const user = req.user as JWTPayload
 		const page = parseInt(req.query.page || '1')
-		const pageSize = parseInt(req.query.page_size || '5')
+		const pageSize = parseInt(req.query.page_size || '20')
 		const jobOffers = await getActiveJobOffersPaginated(page, pageSize)
 		const total = await getJobOffersCount(jobStatus.draft)
 		console.log("Total:", total)

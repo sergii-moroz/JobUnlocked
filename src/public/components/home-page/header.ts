@@ -38,7 +38,7 @@ export class HomeHeader extends HTMLElement {
 
 	render() {
 		this.innerHTML = `
-			<header class="flex justify-between items-center p-4 sm:p-8">
+			<header class="h-16 flex justify-between items-center p-4 sm:p-8">
 				<h1 class="text-xl sm:text-3xl font-bold">🔓JobUnlocked</h1>
 				<div class="flex items-center gap-1 sm:gap-2 md:gap-3">
 					<button id="profile-btn" class="p-2 [&>svg]:size-5 sm:[&>svg]:size-6 dark:hover:bg-gray-800 hover:bg-gray-200 rounded-full hover:shadow-lg transition-all hover:scale-[1.04]">
