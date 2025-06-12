@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { JWTPayload } from "../types/user.types.js";
-import { getActiveJobOffersPaginated, getJobOffersCount } from "../services/joboffers.services.js";
-import { jobStatus } from "../types/jobOffers.types.js";
+import { getJobOffersCount, getJobOffersPaginated } from "../services/joboffers.services.js";
+import { jobStatus } from "../public/types/jobOffers.types.js";
 
 export const handleGetUserRole = async (
 	req:		FastifyRequest,
@@ -17,6 +17,7 @@ export const handleGetJobs = async (
 		Querystring: {
 			page?: string
 			page_size?: string
+			job_status?: string
 		}
 	}>,
 	reply:	FastifyReply
@@ -25,9 +26,10 @@ export const handleGetJobs = async (
 		console.log("handleGetJobOffers")
 		const user = req.user as JWTPayload
 		const page = parseInt(req.query.page || '1')
-		const pageSize = parseInt(req.query.page_size || '20')
-		const jobOffers = await getActiveJobOffersPaginated(page, pageSize)
-		const total = await getJobOffersCount(jobStatus.draft)
+		const pageSize = parseInt(req.query.page_size || '5')
+		const job_status = parseInt(req.query.job_status || '1')
+		const jobOffers = await getJobOffersPaginated(page, pageSize, job_status)
+		const total = await getJobOffersCount(job_status)
 		console.log("Total:", total)
 		const replyData = {
 			data: jobOffers,
