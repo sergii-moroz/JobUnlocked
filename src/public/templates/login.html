@@ -1,0 +1,42 @@
+<div class="grid xl:grid-cols-2">
+	<section>
+		<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+
+			<div class="flex w-full sm:max-w-sm items-center md:max-w-md mb-6 sm:mb-8">
+				<a href="/" data-link><span class="text-5xl mr-2 hidden sm:block">🔓</span></a>
+				<h1 class="text-3xl font-bold mb-2">Welcome to
+					<span class="block text-yellow-500">JobUnlocked</span>
+				</h1>
+			</div>
+
+			<div class="tw-card w-full sm:max-w-sm md:mt-0 md:max-w-md xl:p-0">
+				<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+					<h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+							Sign in to your account
+					</h1>
+
+					<login-form></login-form>
+					<a
+						class="tw-btn-outline w-full mt-4"
+						href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-ef85d500a9b5f0ca16d2a31d1fad04b575d1412258fa221b53791b1c83f89607&redirect_uri=http%3A%2F%2Flocalhost%3A4242%2Fauth%2F42%2Fcallback&response_type=code"
+					>Sign in with 42</a>
+
+
+					<div class="flex justify-between text-sm font-light text-gray-500 dark:text-gray-400 mt-4 md:mt-6">
+						<span>Don't have an account yet?</span>
+						<a
+							href="/register"
+							data-link
+							class="font-medium text-rose-400 hover:underline"
+						>
+							Register
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="bg-gradient-to-tr from-amber-500 via-rose-400 to-pink-500 hidden xl:block"></div>
+
+</div>
