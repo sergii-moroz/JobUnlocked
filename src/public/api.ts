@@ -154,6 +154,11 @@ export class API {
 		return response
 	}
 
+	static async getJobList() {
+		const response = await this.get('/api/job-list');
+		return response;
+	}
+
 	// static async getUser(): Promise<JwtUserPayload> {
 	// 	const response = await this.get('/user');
 	// 	return response
