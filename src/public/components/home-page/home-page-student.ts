@@ -74,6 +74,9 @@ export class HomePageStudent extends HTMLElement {
 				<div class="mt-6 text-xs text-gray-400 dark:text-gray-500 text-right">
 					Posted: ${job.createdAt instanceof Date ? job.createdAt.toLocaleDateString() : new Date(job.createdAt).toLocaleDateString()}
 				</div>
+				<div class="mt-8 flex justify-end">
+					<a href="/application-form/${job.id}" class="tw-btn" id="apply-btn">Apply</a>
+				</div>
 			</div>
 		`;
 	}

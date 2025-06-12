@@ -23,7 +23,12 @@ export class Router {
 		const path = this.getSanitizedPath()
 		let route
 
-		route = routes[path] ?? routes["404"]
+		if(path.startsWith("/application-form/")) {
+			route = routes["/application-form/:"] ?? routes["404"];
+		}else {
+			route = routes[path] ?? routes["404"]
+		}
+
 
 		try {
 			const html = await this.loadTemplate(route.template)

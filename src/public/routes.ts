@@ -24,7 +24,7 @@ export const routes: tRoutes = {
 		description: "Landing page"
 	},
 
-	"/applicationForm": {
+	"/application-form/:": {
 		template: "/templates/student/applications.html",
 		title: `${APP_TITLE}`,
 		description: "Landing page"
@@ -58,30 +58,6 @@ export const routes: tRoutes = {
 		template: "/templates/home.html",
 		title: `Home | ${APP_TITLE}`,
 		description: "Home page"
-	},
-
-	"/waiting-room": {
-		template: "/templates/waiting-room.html",
-		title: `1v1 Lobby | ${APP_TITLE}`,
-		description: "Waiting room for 1v1 matchmaking"
-	},
-
-	"/game/:gameRoomId": {
-		template: "/templates/game.html",
-		title: `Game | ${APP_TITLE}`,
-		description: "Game room for 1v1 matches"
-	},
-
-	"/tournament-list": {
-		template: "/templates/tournament-list.html",
-		title: `Tournaments | ${APP_TITLE}`,
-		description: "List of tournaments"
-	},
-
-	"/tournament/:tournamentId": {
-		template: "/templates/tournament.html",
-		title: `Tournament | ${APP_TITLE}`,
-		description: "Tournament page"
 	},
 
 	"/settings": {
@@ -136,18 +112,6 @@ export const routes: tRoutes = {
 		template: "/templates/settings/2fa/disabled-confirmation.html",
 		title: `2FA Disabled | ${APP_TITLE}`,
 		description: "Confirmation of disabling 2FA"
-	},
-
-	"/leaderboard": {
-		template: "/templates/leaderboard.html",
-		title: `Leaderboard | ${APP_TITLE}`,
-		description: "Leaderboard"
-	},
-
-	"/history": {
-		template: "/templates/history.html",
-		title: `Play History | ${APP_TITLE}`,
-		description: "User's play history"
 	},
 
 	"/student/dashboard": {
