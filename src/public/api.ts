@@ -155,8 +155,18 @@ export class API {
 	}
 
 	static async getJobList() {
-		const response = await this.get('/api/job-list');
+		const response = await this.get('/api/jobs');
 		return response;
+  }
+
+	// static async getAllJobOffersForStudents(){
+	// 	const response = await this.get('/api/student/jobs/all')
+	// 	return response
+	// }
+
+	static async getJobOffersForStudents(page: number = 1, pageSize: number = 5) {
+		const response = await this.get(`/api/student/jobs/?page=${page}&page_size=${pageSize}`)
+		return response
 	}
 
 	// static async getUser(): Promise<JwtUserPayload> {
