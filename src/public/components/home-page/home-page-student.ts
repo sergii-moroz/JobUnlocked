@@ -14,106 +14,7 @@ export class HomePageStudent extends HTMLElement {
 	constructor() {
 		super();
 
-		this.JobList = [
-			{
-				id: "1",
-				createdBy: "user123",
-				title: "Software Engineer",
-				description: "Develop and maintain software applications.",
-				requirements: "Bachelor's degree in Computer Science or related field.",
-				type: 1, // Full-time
-				jobStatus: 0, // Open
-				location: "Remote",
-				salary: 60000,
-				company: "Tech Solutions Inc.",
-				createdAt: new Date(),
-				updatedAt: new Date()
-			},
-			{
-				id: "2",
-				createdBy: "user456",
-				title: "Data Analyst",
-				description: "Analyze data to help make business decisions.",
-				requirements: "Experience with SQL and data visualization tools.",
-				type: 2, // Part-time
-				jobStatus: 0, // Open
-				location: "New York, NY",
-				salary: 50000,
-				company: "Data Insights LLC",
-				createdAt: new Date(),
-				updatedAt: new Date()
-			},
-			{
-				id: "3",
-				createdBy: "user789",
-				title: "Project Manager",
-				description: "Oversee projects from inception to completion.",
-				requirements: "PMP certification preferred.",
-				type: 1, // Full-time
-				jobStatus: 0, // Open
-				location: "San Francisco, CA",
-				salary: 80000,
-				company: "Global Projects Corp.",
-				createdAt: new Date(),
-				updatedAt: new Date()
-			},
-			{
-				id: "4",
-				createdBy: "user101",
-				title: "UX Designer",
-				description: "Design user-friendly interfaces for web applications.",
-				requirements: "Experience with Figma and user research.",
-				type: 2, // Part-time
-				jobStatus: 0, // Open
-				location: "Austin, TX",
-				salary: 70000,
-				company: "Creative Designs Ltd.",
-				createdAt: new Date(),
-				updatedAt: new Date()
-			},
-			{
-				id: "5",
-				createdBy: "user102",
-				title: "DevOps Engineer",
-				description: "Manage infrastructure and deployment pipelines.",
-				requirements: "Experience with AWS and Docker.",
-				type: 1, // Full-time
-				jobStatus: 0, // Open
-				location: "Chicago, IL",
-				salary: 75000,
-				company: "Cloud Services Co.",
-				createdAt: new Date(),
-				updatedAt: new Date()
-			},
-			{
-				id: "6",
-				createdBy: "user103",
-				title: "Marketing Specialist",
-				description: "Develop and execute marketing strategies.",
-				requirements: "Experience with digital marketing tools.",
-				type: 2, // Part-time
-				jobStatus: 0, // Open
-				location: "Los Angeles, CA",
-				salary: 55000,
-				company: "Marketing Pros Inc.",
-				createdAt: new Date(),
-				updatedAt: new Date()
-			},
-			{
-				id: "7",
-				createdBy: "user104",
-				title: "Content Writer",
-				description: "Create engaging content for blogs and websites.",
-				requirements: "Strong writing skills and creativity.",
-				type: 2, // Part-time
-				jobStatus: 0, // Open
-				location: "Remote",
-				salary: 40000,
-				company: "Content Creators Ltd.",
-				createdAt: new Date(),
-				updatedAt: new Date()
-			}
-		];
+		this.JobList = [];
 		this.render();
 	}
 
@@ -130,9 +31,9 @@ export class HomePageStudent extends HTMLElement {
 
 	private render() {
 		this.innerHTML = `
-		<div class="flex gap-2 h-dvh">
+		<div class="flex gap-2 h-[calc(100dvh-64px)] mx-2">
 			<div id="jobList" class="w-[40%] h-full overflow-y-auto space-y-2"></div>
-			<div id="jobDetails" class="w-[60%] h-full overflow-y-auto"></div>
+			<div id="jobDetails" class="w-[60%] h-full overflow-y-auto mb-4"></div>
 		</div>
 		`
 	}
@@ -155,13 +56,12 @@ export class HomePageStudent extends HTMLElement {
 		if (!detailsContainer) return;
 
 		detailsContainer.innerHTML = `
-			<div class="bg-white dark:bg-gray-800 rounded-2xl shadow p-8 m-2 w-dhv h-dhv">
+			<div class="bg-white dark:bg-gray-800 rounded-2xl shadow p-8 m-2 w-dhv h-full overflow-y-auto">
 				<h1 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">${job.title}</h1>
 				<div class="flex flex-wrap gap-4 mb-4 text-sm text-gray-600 dark:text-gray-300">
 					<span class="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">${this.JobTypeLabels[job.type]}</span>
 					<span class="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">${job.location}</span>
 					<span class="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">${job.company}</span>
-					<span class="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">Salary: €${job.salary}</span>
 				</div>
 				<div class="mb-4">
 					<h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-1">Description</h2>
@@ -180,9 +80,9 @@ export class HomePageStudent extends HTMLElement {
 
 	async loadJobList() {
 		try {
-			// const data = await API.getJobList();
-			// if (!data.success) throw Error(`fetching friendList data failed: ${data.message}`);
-			// this.JobList = data.data;
+			const data = await API.getJobList();
+			if (!data.data) throw Error(`fetching job offers failed: ${data.data}`);
+			this.JobList = data.data;
 			this.populateJobList();
 		} catch (error) {
 			console.error("Error loading job list:", error);
