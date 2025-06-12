@@ -103,4 +103,13 @@
 			rounded-md px-5 py-2.5 text-center
 			dark:bg-primary/10 dark:border-gray-700
 	}
+
+	.tw-bg-blurred {
+		@apply fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden;
+	}
+
+	.tw-list-entry {
+		@apply bg-white rounded-2xl overflow-hidden border border-gray-200
+			dark:bg-gray-800 dark:border-gray-700
+	}
 }
