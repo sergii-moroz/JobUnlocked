@@ -8,11 +8,6 @@ export class HomePage extends HTMLElement {
 	}
 
 	async connectedCallback() {
-		// const response = await API.getUserRole()
-		// console.log("USER ROLE:", response)
-		// console.log("USER ROLE:", response.role)
-		// this.render(response.role as number)
-
 		try {
 			const { role } = await API.getUserRole();
 			this.render(role);
@@ -35,7 +30,7 @@ export class HomePage extends HTMLElement {
 				this.innerHTML = `<home-page-partner></home-page-partner>`
 				break
 			case 3:
-				this.innerHTML = `<home-page-staff></home-page-staff>`
+				this.innerHTML = `<home-page-stuff></home-page-stuff>`
 				break
 			default:
 				this.innerHTML = `<unknown-role></unknown-role>`

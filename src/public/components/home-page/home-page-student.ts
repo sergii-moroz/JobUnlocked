@@ -1,6 +1,7 @@
 import { API } from "../../api.js"
 import { JobOffer } from "../../types/job-offer.js"
 import { JobType } from "../../types/enums.js"
+import { jobStatus } from "../../types/jobOffers.types.js";
 
 export class HomePageStudent extends HTMLElement {
 	private JobList: Array<JobOffer>;
@@ -15,10 +16,10 @@ export class HomePageStudent extends HTMLElement {
 		super();
 
 		this.JobList = [];
-		this.render();
 	}
 
 	async connectedCallback() {
+		this.render();
 		this.loadJobList();
 
 		this.addEventListener('click', this.handleDynamicContent);
@@ -56,7 +57,7 @@ export class HomePageStudent extends HTMLElement {
 		if (!detailsContainer) return;
 
 		detailsContainer.innerHTML = `
-			<div class="bg-white dark:bg-gray-800 rounded-2xl shadow p-8 m-2 w-dhv h-full overflow-y-auto">
+			<div class="bg-white dark:bg-gray-800 rounded-2xl shadow p-8 m-2 mt-0 w-dhv h-full overflow-y-auto flex flex-col">
 				<h1 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">${job.title}</h1>
 				<div class="flex flex-wrap gap-4 mb-4 text-sm text-gray-600 dark:text-gray-300">
 					<span class="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">${this.JobTypeLabels[job.type]}</span>
@@ -71,11 +72,14 @@ export class HomePageStudent extends HTMLElement {
 					<h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-1">Requirements</h2>
 					<p class="text-gray-700 dark:text-gray-300">${job.requirements}</p>
 				</div>
-				<div class="mt-6 text-xs text-gray-400 dark:text-gray-500 text-right">
-					Posted: ${job.createdAt instanceof Date ? job.createdAt.toLocaleDateString() : new Date(job.createdAt).toLocaleDateString()}
-				</div>
-				<div class="mt-8 flex justify-end">
-					<a href="/application-form/${job.id}" class="tw-btn" id="apply-btn">Apply</a>
+				<div class="mt-auto flex-col">
+					<div class="text-xs text-gray-400 dark:text-gray-500 text-right mb-2">
+						Posted: ${job.created_at instanceof Date ? job.created_at.toLocaleDateString() : new Date(job.created_at).toLocaleDateString()}<br>
+						Edited: ${job.updated_at instanceof Date ? job.updated_at.toLocaleDateString() : new Date(job.updated_at).toLocaleDateString()}
+					</div>
+					<div class="flex justify-center w-full">
+						<a href="/application-form/${job.id}" class="tw-btn w-2/5 min-w-[140px] mx-auto" id="apply-btn">Apply Now!</a>
+					</div>
 				</div>
 			</div>
 		`;
@@ -83,7 +87,7 @@ export class HomePageStudent extends HTMLElement {
 
 	async loadJobList() {
 		try {
-			const data = await API.getJobList();
+			const data = await API.getJobList(1, 20, jobStatus.draft);
 			if (!data.data) throw Error(`fetching job offers failed: ${data.data}`);
 			this.JobList = data.data;
 			this.populateJobList();
@@ -117,7 +121,7 @@ export class HomePageStudent extends HTMLElement {
 					</div>
 				</div>
 				<div class="text-xs text-gray-400 whitespace-nowrap ml-4 flex-shrink-0 text-right">
-					${job.createdAt instanceof Date ? job.createdAt.toLocaleDateString() : new Date(job.createdAt).toLocaleDateString()}
+					${job.created_at instanceof Date ? job.created_at.toLocaleDateString() : new Date(job.created_at).toLocaleDateString()}
 				</div>
 			`;
 			root.appendChild(jobElement);

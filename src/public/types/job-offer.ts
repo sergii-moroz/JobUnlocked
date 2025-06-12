@@ -10,8 +10,9 @@ export interface JobOffer {
 	jobStatus: number;
 	location: string;
 	company: string;
-	createdAt: Date;
-	updatedAt: Date;
+	approval_date: Date;
+	created_at: Date;
+	updated_at: Date;
 }
 
 export interface JobOfferRequest {

@@ -1,4 +1,6 @@
 import { JobOfferRequest } from "./types/job-offer.js"
+import { jobStatus } from "./types/jobOffers.types.js"
+
 
 export class API {
 	static baseUrl: string
@@ -155,20 +157,21 @@ export class API {
 		return response
 	}
 
-	static async getJobList() {
-		const response = await this.get('/api/jobs');
+	static async getJobList(page: number = 1, page_size: number = 5, job_status: jobStatus = jobStatus.approved) {
+		const response = await this.get(`/api/general-jobs?page=${page}&page_size=${page_size}&job_status=${job_status}`);
 		return response;
   }
 
-	// static async getAllJobOffersForStudents(){
-	// 	const response = await this.get('/api/student/jobs/all')
+	// static async getGeneralJob(page: number = 1, page_size: number = 5, job_status: jobStatus = jobStatus.approved) {
+	// 	const response = await this.get(`/api/general-jobs?page=${page}&page_size=${page_size}&job_status=${job_status}`);
+	// 	return response;
+  // }
+
+
+	// static async getJobs(page: number = 1, pageSize: number = 5, job_status: jobStatus = jobStatus.approved) {
+	// 	const response = await this.get(`/api/student/jobs/?page=${page}&page_size=${pageSize}&job_status=${job_status}`)
 	// 	return response
 	// }
-
-	static async getJobOffersForStudents(page: number = 1, pageSize: number = 5) {
-		const response = await this.get(`/api/student/jobs/?page=${page}&page_size=${pageSize}`)
-		return response
-	}
 
 	// static async getUser(): Promise<JwtUserPayload> {
 	// 	const response = await this.get('/user');

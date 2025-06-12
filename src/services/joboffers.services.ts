@@ -28,9 +28,10 @@ export const getJobOffersCount = async (status: number): Promise<number> => {
 	})
 }
 
-export const getActiveJobOffersPaginated = async (
+export const getJobOffersPaginated = async (
 	page: number = 1,
 	pageSize: number = 5,
+	job_status: jobStatus
 ): Promise<JobOffersProps[]> => {
 	return new Promise((resolve, reject) => {
 		const offset = (page - 1) * pageSize
@@ -54,7 +55,7 @@ export const getActiveJobOffersPaginated = async (
 			LIMIT ? OFFSET ?
 		`
 
-		db.all<JobOffersProps>(sql, [jobStatus.draft, pageSize, offset], (err, rows) => {
+		db.all<JobOffersProps>(sql, [job_status, pageSize, offset], (err, rows) => {
 				if (err) return reject(err)
 				resolve(rows)
 			}
