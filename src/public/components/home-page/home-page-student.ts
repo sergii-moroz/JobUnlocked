@@ -7,8 +7,9 @@ export class HomePageStudent extends HTMLElement {
 	}
 
 	async connectedCallback() {
-		// const role = await API.getUserRole()
-		// console.log("USER ROLE:", role)
+		const response = await API.getJobs()
+		console.log("RESPONSE", response)
+
 		this.render()
 	}
 
