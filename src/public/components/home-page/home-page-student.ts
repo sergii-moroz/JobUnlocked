@@ -72,7 +72,7 @@ export class HomePageStudent extends HTMLElement {
 					<p class="text-gray-700 dark:text-gray-300">${job.requirements}</p>
 				</div>
 				<div class="mt-auto flex-col">
-					<div class="text-xs text-gray-400 dark:text-gray-500 text-right">
+					<div class="text-xs text-gray-400 dark:text-gray-500 text-right mb-2">
 						Posted: ${job.created_at instanceof Date ? job.created_at.toLocaleDateString() : new Date(job.created_at).toLocaleDateString()}<br>
 						Edited: ${job.updated_at instanceof Date ? job.updated_at.toLocaleDateString() : new Date(job.updated_at).toLocaleDateString()}
 					</div>

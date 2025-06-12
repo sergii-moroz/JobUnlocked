@@ -95,7 +95,7 @@ export class HomePageParthner extends HTMLElement {
 					<p class="text-gray-700 dark:text-gray-300">${job.requirements}</p>
 				</div>
 				<div class="mt-auto flex-col">
-					<div class="text-xs text-gray-400 dark:text-gray-500 text-right">
+					<div class="text-xs text-gray-400 dark:text-gray-500 text-right mb-2">
 						Posted: ${job.created_at instanceof Date ? job.created_at.toLocaleDateString() : new Date(job.created_at).toLocaleDateString()}<br>
 						Edited: ${job.updated_at instanceof Date ? job.updated_at.toLocaleDateString() : new Date(job.updated_at).toLocaleDateString()}
 					</div>
@@ -121,7 +121,7 @@ export class HomePageParthner extends HTMLElement {
 					<input name="location" class="tw-input w-full" value="${job.location}" required />
 				</label>
 				<label class="mb-2 text-gray-700 dark:text-gray-200">Company
-					<input name="company" class="tw-input w-full" value="${job.company}" required />
+					<input name="company" class="tw-input w-full bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed" value="${job.company}" readonly />
 				</label>
 				<label class="mb-2 text-gray-700 dark:text-gray-200">Description
 					<textarea name="description" class="tw-input w-full" required>${job.description}</textarea>
