@@ -1,4 +1,6 @@
+import { JobOfferRequest } from "./types/job-offer.js"
 import { jobStatus } from "./types/jobOffers.types.js"
+
 
 export class API {
 	static baseUrl: string
@@ -286,100 +288,119 @@ export class API {
 
 
 
-	static async getHome() {
-		try {
-			const res = await this.get('/api/home');
-			return res;
-		} catch (error) {
-			console.error("Home API call failed:", error);
-			return null;
-		}
-	}
+	// static async getHome() {
+	// 	try {
+	// 		const res = await this.get('/api/home');
+	// 		return res;
+	// 	} catch (error) {
+	// 		console.error("Home API call failed:", error);
+	// 		return null;
+	// 	}
+	// }
 
-	static async getSidebar() {
-		try {
-			const res = await this.get('/api/sidebar');
-			return res;
-		} catch (error) {
-			console.error("Sidebar API call failed:", error);
-			return null;
-		}
-	}
+	// static async getSidebar() {
+	// 	try {
+	// 		const res = await this.get('/api/sidebar');
+	// 		return res;
+	// 	} catch (error) {
+	// 		console.error("Sidebar API call failed:", error);
+	// 		return null;
+	// 	}
+	// }
 
-	static async getChat(name: string) {
-		try {
-			const res = await this.post('/api/chat', {name});
-			if (!res.ok) {
-				console.error("Add Friend API call failed");
-				return null;
-			}
+	// static async getChat(name: string) {
+	// 	try {
+	// 		const res = await this.post('/api/chat', {name});
+	// 		if (!res.ok) {
+	// 			console.error("Add Friend API call failed");
+	// 			return null;
+	// 		}
 
+	// 		return res.json();
+	// 	} catch (error) {
+	// 		console.error("Chat Sidebar API call failed:", error);
+	// 		return null;
+	// 	}
+	// }
+
+	// static async addFriend(name: string) {
+	// 	try {
+	// 		const res = await this.post('/api/addFriend', {name});
+	// 		if (!res.ok)
+	// 			console.error("Add Friend API call failed");
+	// 	} catch (error) {
+	// 		console.error("Add Friend API call failed:", error);
+	// 	}
+	// }
+
+	// static async acceptFriend(name: string) {
+	// 	try {
+	// 		const res = await this.post('/api/acceptFriend', {name});
+	// 		if (!res.ok)
+	// 			console.error("Accept Friend API call failed");
+	// 	} catch (error) {
+	// 		console.error("Accept Friend API call failed:", error);
+	// 	}
+	// }
+
+	// static async rejectFriend(name: string) {
+	// 	try {
+	// 		const res = await this.post('/api/rejectFriend', {name});
+	// 		if (!res.ok)
+	// 			console.error("reject Friend API call failed");
+	// 	} catch (error) {
+	// 		console.error("reject Friend API call failed:", error);
+	// 	}
+	// }
+
+	// static async deleteFriend(name: string) {
+	// 	try {
+	// 		const res = await this.post('/api/deleteFriend', {name});
+	// 		if (!res.ok)
+	// 			console.error("delete Friend API call failed");
+	// 	} catch (error) {
+	// 		console.error("delete Friend API call failed:", error);
+	// 	}
+	// }
+
+	// static async blockFriend(name: string) {
+	// 	try {
+	// 		const res = await this.post('/api/blockFriend', {name});
+	// 		if (!res.ok)
+	// 			console.error("delete Friend API call failed");
+	// 	} catch (error) {
+	// 		console.error("delete Friend API call failed:", error);
+	// 	}
+	// }
+
+	// static async unblockFriend(name: string) {
+	// 	try {
+	// 		const res = await this.post('/api/unblockFriend', {name});
+	// 		if (!res.ok)
+	// 			console.error("delete Friend API call failed");
+	// 	} catch (error) {
+	// 		console.error("delete Friend API call failed:", error);
+	// 	}
+	// }
+
+	static async submitStudentApplication(formData: FormData) {
+		try {
+			const res = await this.post('/api/student/submitApplicationForm', formData);
 			return res.json();
 		} catch (error) {
-			console.error("Chat Sidebar API call failed:", error);
-			return null;
+			console.error("upload application API call failed:", error);
 		}
 	}
 
-	static async addFriend(name: string) {
+	static async submitJobOffer(data: JobOfferRequest) {
 		try {
-			const res = await this.post('/api/addFriend', {name});
-			if (!res.ok)
-				console.error("Add Friend API call failed");
+			const res = await this.post('/api/company/submitJobOffer', data);
+			return res.json();
 		} catch (error) {
-			console.error("Add Friend API call failed:", error);
+			console.error("upload JobOffer API call failed:", error);
 		}
 	}
 
-	static async acceptFriend(name: string) {
-		try {
-			const res = await this.post('/api/acceptFriend', {name});
-			if (!res.ok)
-				console.error("Accept Friend API call failed");
-		} catch (error) {
-			console.error("Accept Friend API call failed:", error);
-		}
-	}
-
-	static async rejectFriend(name: string) {
-		try {
-			const res = await this.post('/api/rejectFriend', {name});
-			if (!res.ok)
-				console.error("reject Friend API call failed");
-		} catch (error) {
-			console.error("reject Friend API call failed:", error);
-		}
-	}
-
-	static async deleteFriend(name: string) {
-		try {
-			const res = await this.post('/api/deleteFriend', {name});
-			if (!res.ok)
-				console.error("delete Friend API call failed");
-		} catch (error) {
-			console.error("delete Friend API call failed:", error);
-		}
-	}
-
-	static async blockFriend(name: string) {
-		try {
-			const res = await this.post('/api/blockFriend', {name});
-			if (!res.ok)
-				console.error("delete Friend API call failed");
-		} catch (error) {
-			console.error("delete Friend API call failed:", error);
-		}
-	}
-
-	static async unblockFriend(name: string) {
-		try {
-			const res = await this.post('/api/unblockFriend', {name});
-			if (!res.ok)
-				console.error("delete Friend API call failed");
-		} catch (error) {
-			console.error("delete Friend API call failed:", error);
-		}
-	}
 
 
 

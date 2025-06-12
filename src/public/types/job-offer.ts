@@ -9,9 +9,16 @@ export interface JobOffer {
 	type: JobType;
 	jobStatus: number;
 	location: string;
-	salary: number;
 	company: string;
 	approval_date: Date;
 	created_at: Date;
 	updated_at: Date;
+}
+
+export interface JobOfferRequest {
+	title: string;
+	description: string;
+	requirements: string;
+	type: JobType;
+	location: string;
 }
