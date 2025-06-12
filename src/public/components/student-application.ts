@@ -1,9 +1,8 @@
-// import { API } from "../api.js";
-// import { Router } from "../router.js";
+import { API } from "../api.js";
+import { Router } from "../router.js";
 
 export class ApplicationForm extends HTMLElement {
 	form: HTMLFormElement | null = null;
-	cancel: HTMLElement | null = null;
 
     constructor() {
         super();
@@ -12,14 +11,11 @@ export class ApplicationForm extends HTMLElement {
 
     connectedCallback() {
 		this.form = this.querySelector('#application-form');
-		this.cancel = this.querySelector('#cancel-btn');
         this.form?.addEventListener('submit', this.submitHandler);
-		this.cancel?.addEventListener('click', this.backToHome)
     }
 
 	disconnectedCallback() {
 		this.form?.removeEventListener('submit', this.submitHandler);
-		this.cancel?.removeEventListener('click', this.backToHome);
 	}
 
     private render() {
@@ -55,10 +51,7 @@ export class ApplicationForm extends HTMLElement {
 
 				<!-- Buttons -->
 				<div class="pt-6 flex justify-between items-center">
-					<button type="button" id='cancel-btn'
-						class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
-						Cancel
-					</button>
+					<a href="/home" data-link class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">Cancel</a>
 					<button type="submit"
 						class="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
 						Submit Application
@@ -80,17 +73,17 @@ export class ApplicationForm extends HTMLElement {
 		const formEl = e.target as HTMLFormElement
 		const formData = new FormData(formEl)
 
-			try {
-				// await API.submitApplication(formData)
-				this.showSuccess();
-				formEl.reset()
-			} catch (err) {
-				this.showError();
-			}
-	}
+		const pathParts = window.location.pathname.split("/");
+		const applicationId = pathParts[pathParts.length - 1];
+		formData.append("applicationId", applicationId);
 
-	backToHome = (e: Event) => {
-		// Router.navigateTo("/home");
+		try {
+			const res = await API.submitStudentApplication(formData)
+			if (!res.success) throw new Error;
+			this.showSuccess();
+		} catch (err) {
+			this.showError();
+		}
 	}
 
     showSuccess() {
