@@ -35,3 +35,16 @@ export const getApplications = async (jobOfferID: string): Promise<applicationTy
 		);
 	});
 };
+
+export const addNewApplication = async (student_id: string, job_id: string, cover_letter: string, cv: string): Promise <User | undefined> => {
+	const uuid = crypto.randomUUID()
+	return new Promise((resolve, reject) => {
+		db.get<User>('INSERT INTO applicationPosts (id, student_id, job_id, cover_letter, cv, status) VALUES (?, ?, ?, ?, ?, ?)',
+			[uuid, student_id, job_id, cover_letter, cv, 1],
+			(err, row) => {
+				if (err) return reject(err)
+				resolve(row)
+			}
+		)
+	})
+}

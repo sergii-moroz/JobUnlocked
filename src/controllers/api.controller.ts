@@ -2,9 +2,8 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { JWTPayload, userRoles } from "../types/user.types.js";
 import { addJobOffer, approveJob, getJobOffersCount, getJobOffersPaginated, rejectJob, updateJobPost } from "../services/joboffers.services.js";
 
-import { jobStatus } from "../public/types/jobOffers.types.js";
 import { JobOfferRequest } from "../public/types/job-offer.js";
-import { getApplications } from "../services/partner.services.js";
+import { addNewApplication, getApplications } from "../services/partner.services.js";
 import { InsufficientPermissionError } from "../errors/middleware.errors.js";
 
 export const handleGetUserRole = async (
@@ -77,9 +76,26 @@ export const handleStudentApplicationSubmit = async (
 	try {
 		if (req.user.role !== userRoles.studen) throw new InsufficientPermissionError();
 		const user = req.user as JWTPayload;
-		const data = req.body;
-	
-		// TODO first use make to upload files, then store in db
+		const { applicationId, cvUrl, clUrl, extraUrls } = req.body as {
+			applicationId: string;
+			cvUrl: string | null;
+			clUrl: string | null;
+			extraUrls: string[];
+		};
+
+		console.log('Application submitted:', {
+			userId: user.id,
+			applicationId,
+			cvUrl,
+			clUrl,
+			extraUrls
+		});
+
+		if (!applicationId || !cvUrl || !clUrl)
+			throw new Error('aplication not valid');
+
+		await addNewApplication(user.id, applicationId, clUrl, cvUrl);
+
 		reply.status(200).send({success: true});
 	} catch (error) {
 		console.log(`error: ${error}`);
