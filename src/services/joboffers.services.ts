@@ -110,7 +110,7 @@ export const addJobOffer = async (jobOffer: JobOfferRequest, user_id: string): P
 	return new Promise((resolve, reject) => {
 		db.run(
 			`INSERT INTO jobPosts (id, partner_id, title, description, requirements, location, type, job_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-			[id, user_id, jobOffer.title, jobOffer.description, jobOffer.requirements, jobOffer.location, jobOffer.type, jobStatus.draft],
+			[id, user_id, jobOffer.title, jobOffer.description, jobOffer.requirements, jobOffer.location, jobOffer.type, jobStatus.pendingReview],
 			function (err) {
 				if (err) return reject(err);
 				resolve();
@@ -143,4 +143,32 @@ export const rejectJob = async (jobOfferID: string, user_id: string): Promise<vo
 			}
 		);
 	});
+}
+
+export const getJobOffersInd = async (user_id: string): Promise<JobOffersProps[]> => {
+	return new Promise((resolve, reject) => {
+		const sql = `
+			SELECT
+				jp.id,
+				jp.type,
+				jp.title,
+				jp.description,
+				jp.requirements,
+				jp.created_at,
+				jp.location,
+				p.first_name,
+				p.last_name,
+				p.company
+			FROM jobPosts jp
+			JOIN users p ON jp.partner_id = p.id
+			WHERE jp.job_status = ? AND jp.partner_id = ?
+			ORDER BY jp.approval_date DESC
+		`
+
+		db.all<JobOffersProps>(sql, [3, user_id], (err, rows) => {
+				if (err) return reject(err)
+				resolve(rows)
+			}
+		)
+	})
 }

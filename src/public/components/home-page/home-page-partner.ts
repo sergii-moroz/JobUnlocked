@@ -216,7 +216,7 @@ export class HomePageParthner extends HTMLElement {
 
 	async loadJobList() {
 		try {
-			const data = await API.getJobList(1, 20, jobStatus.draft);
+			const data = await API.getJobListInd();
 			if (!data.data) throw Error(`fetching job offers failed: ${data.data}`);
 			this.JobList = data.data;
 			this.JobList = data.data.map((job: any) => ({

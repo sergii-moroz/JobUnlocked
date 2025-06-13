@@ -163,11 +163,18 @@ export class API {
 		return response;
   }
 
+  	static async getJobListInd() {
+		const response = await this.get(`/api/jobs/ind`);
+		console.log(response);
+		return response;
+  }
+
 	static async updateJob(job: {id: string, title: string, description: string, location: string, company: string, requirements: string}) {
 		const response = await this.post('/api/update/job/offer', {job}, { includeCSRF: true })
 	}
 
 	static async approveOffer(id: string) {
+		console.log("aa");
 		const response = await this.post('/api/approve/job/offer', { jobOfferID: id })
 	}
 

@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { JWTPayload, userRoles } from "../types/user.types.js";
-import { addJobOffer, approveJob, getJobOffersCount, getJobOffersPaginated, rejectJob, updateJobPost } from "../services/joboffers.services.js";
+import { addJobOffer, approveJob, getJobOffersCount, getJobOffersInd, getJobOffersPaginated, rejectJob, updateJobPost } from "../services/joboffers.services.js";
 
 import { JobOfferRequest } from "../public/types/job-offer.js";
 import { addNewApplication, getApplications } from "../services/partner.services.js";
@@ -196,5 +196,22 @@ export const handleRejectJob = async (
 	} catch (error) {
 		console.log(`error: ${error}`);
 		reply.status(400).send({success: false});
+	}
+}
+
+export const handleGetOwnJobOffers = async (
+	req:		FastifyRequest,
+	reply:	FastifyReply
+) => {
+	try {
+		console.log(req.user.id);
+		const jobOffers = await getJobOffersInd(req.user.id);
+		console.log("Total:", jobOffers)
+		const replyData = {
+			data: jobOffers,
+		}
+		reply.send(replyData)
+	} catch (err) {
+		throw err
 	}
 }
