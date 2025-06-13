@@ -35,7 +35,8 @@ export class HomePageStuff extends HTMLElement {
 		await this.loadData()
 		// this.render()
 		this.setupEventListeners()
-		this.setupActionListeners();
+		// this.setupActionListeners();
+		this.addEventListener('click', this.handleDynamicContent)
 	}
 
 	disconnectedCallback() {
@@ -217,6 +218,50 @@ private renderJobList() {
 		`;
 	}
 
+	handleDynamicContent = async (event: Event) => {
+		const target = event.target as HTMLElement;
+
+		const accept = target.closest('#btn-approve') as HTMLButtonElement;
+		if (accept) {
+            const jobId = accept.dataset.jobId;
+			console.log(jobId);
+            if (!jobId) return;
+
+            accept.disabled = true;
+            accept.classList.add('opacity-50');
+
+            try {
+                await API.approveOffer(jobId);
+                this.removeJobFromList(jobId);
+            } catch (error) {
+                console.error('Approval failed:', error);
+            } finally {
+                accept.disabled = false;
+                accept.classList.remove('opacity-50');
+            }
+		}
+
+		const reject = target.closest('#btn-reject') as HTMLButtonElement;
+		if (reject) {
+            const jobId = reject.dataset.jobId;
+            if (!jobId) return;
+
+            reject.disabled = true;
+            reject.classList.add('opacity-50');
+
+            try {
+                await API.rejectOffer(jobId);
+                this.removeJobFromList(jobId);
+            } catch (error) {
+                console.error('Rejection failed:', error);
+            } finally {
+                reject.disabled = false;
+                reject.classList.remove('opacity-50');
+            }
+		}
+
+	}
+
 	private setupJobSelectionListeners() {
 		const jobCards = this.querySelectorAll('[data-job-id]');
 		jobCards.forEach(card => {
@@ -233,6 +278,7 @@ private renderJobList() {
         this.querySelector('#btn-approve')?.addEventListener('click', async (e) => {
             const button = e.target as HTMLButtonElement;
             const jobId = button.dataset.jobId;
+			console.log(jobId);
             if (!jobId) return;
 
             button.disabled = true;
