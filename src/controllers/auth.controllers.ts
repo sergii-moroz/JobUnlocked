@@ -207,6 +207,12 @@ export const handle42Login = async (
 				path: '/',
 				maxAge: 60 * 15
 			})
+			.setCookie('access_token_42', tokenResponse.access_token, {
+				httpOnly: false,
+				sameSite: 'strict',
+				path: '/',
+				maxAge: 60 * 15 * 24 * 7 // 7 days
+			})
 			.redirect(process.env.OAUTH_42_REDIRECT_HOME_URI || '/');
 	} catch (error) {
 		throw error

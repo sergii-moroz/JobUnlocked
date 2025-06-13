@@ -432,5 +432,15 @@ export class API {
 		}
 	}
 
+	static async get42UserInfo() {
+		try {
+			const res = await this.get('/api/user/42/userinfo');
+			return res;
+		} catch (error) {
+			console.error("fetching 42 user info API call failed:", error);
+			return null;
+		}
+	}
+
 }
 
