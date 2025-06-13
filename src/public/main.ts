@@ -30,6 +30,7 @@ import { ModalLoginMenu } from "./components/modal-login-menu.js";
 import { JobOfferForm } from "./components/newJobOffer.js";
 import { RegisterForm } from "./components/register-form.js";
 import { ApplicationForm } from "./components/student-application.js";
+import { Profile } from "./components/dashboard/profile.js";
 // import { WaitingRoom } from "./components/waiting-room.js";
 // import { GameRoom } from "./components/game.js";
 // import { TournamentList } from "./components/tournament-list.js";
@@ -51,6 +52,7 @@ customElements.define('home-page', HomePage)
 customElements.define('home-page-stuff', HomePageStuff)
 customElements.define('home-page-partner', HomePageParthner)
 customElements.define('home-page-student', HomePageStudent)
+customElements.define('profile-page', Profile)
 // customElements.define('play-card', PlayCard)
 // customElements.define('stats-card', StatsCard)
 // customElements.define('top-player-card', TopPlayerCard)

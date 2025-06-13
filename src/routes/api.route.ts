@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
-import { handleGetApplications, handleGetJobs, handleGetUserRole, handleJobOfferSubmit, handleStudentApplicationSubmit, handleUpdateJobOffer } from "../controllers/api.controller.js"
+import { handleGetApplications, handleGetJobs, handleGetUserRole, handleJobOfferSubmit, handleStudentApplicationSubmit, handleUpdateJobOffer, handle42UserInfo } from "../controllers/api.controller.js"
 import { authenticate, checkCsrf } from "../controllers/auth.controllers.js"
 import { db } from "../db/connections.js"
 import { jobStatus } from "../public/types/jobOffers.types.js"
@@ -20,6 +20,9 @@ export const apiRoutes = async (app: FastifyInstance, opts: FastifyPluginOptions
 		handler: handleGetJobs
 	})
 
+	app.get('/user/42/userinfo', {
+		handler: handle42UserInfo
+	})
 
 	app.post('/update/job/offer', {
 		preHandler: [authenticate, checkCsrf],

@@ -6,6 +6,12 @@ import { jobStatus } from "../public/types/jobOffers.types.js";
 import { JobOfferRequest } from "../public/types/job-offer.js";
 import { getApplications } from "../services/partner.services.js";
 
+import {
+	determineUserRole,
+	get42AccessToken,
+	get42UserInfo,
+} from "../services/42.services.js";
+
 export const handleGetUserRole = async (
 	req:		FastifyRequest,
 	reply:	FastifyReply
@@ -49,6 +55,24 @@ export const handleGetJobs = async (
 	}
 }
 
+export const handle42UserInfo = async (
+	req:		FastifyRequest<{ Querystring: { code: string } }>,
+	reply:	FastifyReply
+) => {
+	try {
+		if(!req.cookies.access_token_42) {
+			return reply.status(401).send({ success: false, error: "Unauthorized" });
+		}
+		const userInfo = await get42UserInfo(req.cookies.access_token_42);
+		reply.send({
+			success: true,
+			data: userInfo
+		});
+	} catch (error) {
+		throw error
+	}
+}
+
 
 export const handleUpdateJobOffer = async (
 	req:		FastifyRequest,
@@ -70,12 +94,12 @@ export const handleUpdateJobOffer = async (
 
 export const handleStudentApplicationSubmit = async (
 	req: FastifyRequest,
-	reply: FastifyReply 
+	reply: FastifyReply
 ) => {
 	try {
 		const user = req.user as JWTPayload;
 		const data = req.body;
-	
+
 		// TODO first use make to upload files, then store in db
 		reply.status(200).send({success: true});
 	} catch (error) {
@@ -86,7 +110,7 @@ export const handleStudentApplicationSubmit = async (
 
 export const handleJobOfferSubmit = async (
 	req: FastifyRequest,
-	reply: FastifyReply 
+	reply: FastifyReply
 ) => {
 	try {
 		const data = req.body as JobOfferRequest;
@@ -100,15 +124,15 @@ export const handleJobOfferSubmit = async (
 
 export const handleGetApplications = async (
 	req: FastifyRequest<{ Body: { jobOfferID: string } }>,
-	reply: FastifyReply 
+	reply: FastifyReply
 ) => {
 	try {
 		const { jobOfferID } = req.body;
 
 		if (!jobOfferID) {
-			return reply.status(400).send({ 
-				success: false, 
-				error: "jobOfferID is required" 
+			return reply.status(400).send({
+				success: false,
+				error: "jobOfferID is required"
 			});
 		}
 		const applications = await getApplications(jobOfferID)
