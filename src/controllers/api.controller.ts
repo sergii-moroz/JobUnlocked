@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { JWTPayload } from "../types/user.types.js";
-import { addJobOffer, getJobOffersCount, getJobOffersPaginated, updateJobPost } from "../services/joboffers.services.js";
+import { JWTPayload, userRoles } from "../types/user.types.js";
+import { addJobOffer, approveJob, getJobOffersCount, getJobOffersPaginated, rejectJob, updateJobPost } from "../services/joboffers.services.js";
 
-import { jobStatus } from "../public/types/jobOffers.types.js";
 import { JobOfferRequest } from "../public/types/job-offer.js";
-import { getApplications } from "../services/partner.services.js";
+import { addNewApplication, getApplications } from "../services/partner.services.js";
+import { InsufficientPermissionError } from "../errors/middleware.errors.js";
 
 import {
 	determineUserRole,
@@ -79,6 +79,7 @@ export const handleUpdateJobOffer = async (
 	reply:	FastifyReply
 ) => {
 	try {
+		if (req.user.role !== userRoles.partner) throw new InsufficientPermissionError();
 		const { job } = req.body as any
 		console.log("id", req.body)
 		const user = req.user as JWTPayload
@@ -97,10 +98,28 @@ export const handleStudentApplicationSubmit = async (
 	reply: FastifyReply
 ) => {
 	try {
+		if (req.user.role !== userRoles.studen) throw new InsufficientPermissionError();
 		const user = req.user as JWTPayload;
-		const data = req.body;
+		const { applicationId, cvUrl, clUrl, extraUrls } = req.body as {
+			applicationId: string;
+			cvUrl: string | null;
+			clUrl: string | null;
+			extraUrls: string[];
+		};
 
-		// TODO first use make to upload files, then store in db
+		console.log('Application submitted:', {
+			userId: user.id,
+			applicationId,
+			cvUrl,
+			clUrl,
+			extraUrls
+		});
+
+		if (!applicationId || !cvUrl || !clUrl)
+			throw new Error('aplication not valid');
+
+		await addNewApplication(user.id, applicationId, clUrl, cvUrl);
+
 		reply.status(200).send({success: true});
 	} catch (error) {
 		console.log(`error: ${error}`);
@@ -113,6 +132,7 @@ export const handleJobOfferSubmit = async (
 	reply: FastifyReply
 ) => {
 	try {
+		if (req.user.role !== userRoles.partner) throw new InsufficientPermissionError();
 		const data = req.body as JobOfferRequest;
 		await addJobOffer(data, req.user.id);
 		reply.status(200).send({success: true});
@@ -127,6 +147,7 @@ export const handleGetApplications = async (
 	reply: FastifyReply
 ) => {
 	try {
+		if (req.user.role !== userRoles.partner) throw new InsufficientPermissionError();
 		const { jobOfferID } = req.body;
 
 		if (!jobOfferID) {
@@ -138,6 +159,61 @@ export const handleGetApplications = async (
 		const applications = await getApplications(jobOfferID)
 		const answer = {
 			applications,
+			success: true
+		};
+		reply.status(200).send(answer);
+	} catch (error) {
+		console.log(`error: ${error}`);
+		reply.status(400).send({success: false});
+	}
+}
+
+
+export const handleApproveJob = async (
+	req: FastifyRequest<{ Body: { jobOfferID: string } }>,
+	reply: FastifyReply
+) => {
+	try {
+		if (req.user.role !== userRoles.stuff) throw new InsufficientPermissionError();
+		const { jobOfferID } = req.body;
+		console.log("jobid: ", jobOfferID);
+		console.log(req.user.id);
+		if (!jobOfferID) {
+			return reply.status(400).send({
+				success: false,
+				error: "jobOfferID is required"
+			});
+		}
+
+		await approveJob(jobOfferID, req.user.id);
+		const answer = {
+			success: true
+		};
+		reply.status(200).send(answer);
+	} catch (error) {
+		console.log(`error: ${error}`);
+		reply.status(400).send({success: false});
+	}
+}
+
+export const handleRejectJob = async (
+	req: FastifyRequest<{ Body: { jobOfferID: string } }>,
+	reply: FastifyReply
+) => {
+	try {
+		if (req.user.role !== userRoles.stuff) throw new InsufficientPermissionError();
+		const { jobOfferID } = req.body;
+		console.log("jobid: ", jobOfferID);
+		console.log(req.user.id);
+		if (!jobOfferID) {
+			return reply.status(400).send({
+				success: false,
+				error: "jobOfferID is required"
+			});
+		}
+
+		await rejectJob(jobOfferID, req.user.id);
+		const answer = {
 			success: true
 		};
 		reply.status(200).send(answer);
