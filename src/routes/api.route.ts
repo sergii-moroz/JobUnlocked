@@ -40,18 +40,19 @@ export const apiRoutes = async (app: FastifyInstance, opts: FastifyPluginOptions
 	app.post('/company/getApplications', {
 		preHandler: [authenticate],
 		handler: handleGetApplications
+	})
 
 	app.post('/approve/job/offer', {preHandler: [authenticate, checkCsrf]}, async (req, reply) => {
 		const { id } = req.params as {id: any}
-    try {
-        await db.run(`
-            UPDATE jobPosts
-            SET job_status = ?, approved_by = ?, approval_date = CURRENT_TIMESTAMP
-            WHERE id = ?
-        `, [jobStatus.approved, req.user.id, id]);
-        return { success: true };
-    } catch (error) {
-        reply.status(500).send({ error: 'Failed to approve job' });
-    }
+		try {
+			await db.run(`
+				UPDATE jobPosts
+				SET job_status = ?, approved_by = ?, approval_date = CURRENT_TIMESTAMP
+				WHERE id = ?
+			`, [jobStatus.approved, req.user.id, id]);
+			return { success: true };
+		} catch (error) {
+			reply.status(500).send({ error: 'Failed to approve job' });
+		}
 	})
 }
