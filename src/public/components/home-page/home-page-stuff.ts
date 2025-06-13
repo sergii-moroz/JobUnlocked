@@ -88,9 +88,9 @@ export class HomePageStuff extends HTMLElement {
 	private render() {
 		const jobList = this.renderJobList()
 		const jobDetails = this.renderJobDetails()
-		const pagination = this.renderPagination()
-		const pageSizeBlock = this.renderPageSize()
-		const totalPagesBlock = this.renderTotalPages()
+		// const pagination = this.renderPagination()
+		// const pageSizeBlock = this.renderPageSize()
+		// const totalPagesBlock = this.renderTotalPages()
 
 		this.innerHTML = `
 			<!-- Header (fixed height) -->
@@ -116,13 +116,6 @@ export class HomePageStuff extends HTMLElement {
 				</div>
 
 				<!-- Pagination (fixed height at bottom) -->
-				<div class="p-4 ">
-						<div class="flex items-center justify-between">
-								${totalPagesBlock}
-								${pagination}
-								${pageSizeBlock}
-						</div>
-				</div>
 			</div>
 
 			<!-- Main content area (75% width) -->
@@ -138,7 +131,7 @@ export class HomePageStuff extends HTMLElement {
 private renderJobList() {
 	if (this.data.length === 0) {
 		return `
-			<div class="tw-card p-4 text-center text-gray-500">
+			<div class="tw-list-entry p-4 text-center text-gray-500">
 					No Pending Job Offers found
 			</div>
 		`;
@@ -147,7 +140,7 @@ private renderJobList() {
 	return this.data.map(row => {
 		const isSelected = this.selectedJob?.id === row.id;
 		return `
-			<div class="tw-card p-4 cursor-pointer transition-all ${isSelected ? 'ring-2 ring-blue-500' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}"
+			<div class="tw-list-entry p-4 cursor-pointer transition-all ${isSelected ? 'ring-2 ring-blue-500' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}"
 				data-job-id="${row.id}">
 				<div class="flex flex-col gap-1">
 						<h2 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">${row.title}</h2>
@@ -173,9 +166,9 @@ private renderJobList() {
 
 		if (!this.selectedJob) {
 				return `
-						<div class="flex items-center justify-center h-full">
-								<div class="text-gray-500">Select a job to view details</div>
-						</div>
+					<div class="flex items-center justify-center h-full">
+							<div class="text-gray-500">Select a job to view details</div>
+					</div>
 				`;
 		}
 
