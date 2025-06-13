@@ -34,7 +34,7 @@ export class HomePageStudent extends HTMLElement {
 		this.innerHTML = `
 		<div class="flex gap-2 h-[calc(100dvh-64px)] mx-2">
 			<div id="jobList" class="w-[40%] h-full overflow-y-auto space-y-2"></div>
-			<div id="jobDetails" class="w-[60%] h-full overflow-y-auto mb-4"></div>
+			<div id="jobDetails" class="w-[60%] overflow-y-auto mb-4"></div>
 		</div>
 		`
 	}
@@ -57,7 +57,7 @@ export class HomePageStudent extends HTMLElement {
 		if (!detailsContainer) return;
 
 		detailsContainer.innerHTML = `
-			<div class="bg-white dark:bg-gray-800 rounded-2xl shadow p-8 m-2 mt-0 w-dhv h-full overflow-y-auto flex flex-col">
+			<div class="bg-white dark:bg-gray-800 rounded-2xl shadow p-8 m-2 mt-0 w-dhv overflow-y-auto flex flex-col">
 				<h1 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">${job.title}</h1>
 				<div class="flex flex-wrap gap-4 mb-4 text-sm text-gray-600 dark:text-gray-300">
 					<span class="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">${this.JobTypeLabels[job.type]}</span>
