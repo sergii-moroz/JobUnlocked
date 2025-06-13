@@ -30,14 +30,14 @@ export class ApplicationForm extends HTMLElement {
 
 				<!-- CV Upload -->
 				<div>
-					<label for="cv" class="block text-sm font-medium text-gray-700 mb-1">CV</label>
+					<label for="cv" class="block text-sm font-medium text-gray-700 mb-1">CV *</label>
 					<input type="file" id="cv" name="cv" accept=".pdf" required
 						class="block w-full text-sm text-gray-600 rounded-md border border-gray-300 shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition" />
 				</div>
 
 				<!-- Cover Letter Upload -->
 				<div>
-					<label for="cl" class="block text-sm font-medium text-gray-700 mb-1">Cover Letter</label>
+					<label for="cl" class="block text-sm font-medium text-gray-700 mb-1">Cover Letter *</label>
 					<input type="file" id="cl" name="cl" accept=".pdf" required
 						class="block w-full text-sm text-gray-600 rounded-md border border-gray-300 shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition" />
 				</div>
@@ -69,22 +69,67 @@ export class ApplicationForm extends HTMLElement {
     }
 
     submitHandler = async (e: Event) => {
-		e.preventDefault();
-		const formEl = e.target as HTMLFormElement
-		const formData = new FormData(formEl)
+        e.preventDefault();
+        const formEl = e.target as HTMLFormElement;
+        const formData = new FormData(formEl);
 
-		const pathParts = window.location.pathname.split("/");
-		const applicationId = pathParts[pathParts.length - 1];
-		formData.append("applicationId", applicationId);
+        const pathParts = window.location.pathname.split("/");
+        const applicationId = pathParts[pathParts.length - 1];
 
-		try {
-			const res = await API.submitStudentApplication(formData)
-			if (!res.success) throw new Error;
-			this.showSuccess();
-		} catch (err) {
-			this.showError();
-		}
-	}
+        try {
+            // Upload files directly to Make.com
+            const cvFile = formData.get('cv') as File;
+            const clFile = formData.get('cl') as File;
+            const extraFiles = formData.getAll('extra') as File[];
+
+            // Upload CV
+            const cvUrl = cvFile ? await this.uploadFileToMake(cvFile) : null;
+            
+            // Upload Cover Letter
+            const clUrl = clFile ? await this.uploadFileToMake(clFile) : null;
+            
+            // Upload extra files
+            const extraUrls = [];
+            for (const file of extraFiles) {
+                if (file.size > 0) {
+                    const url = await this.uploadFileToMake(file);
+                    extraUrls.push(url);
+                }
+            }
+
+            // Submit application with file URLs
+            const applicationData = {
+                applicationId,
+                cvUrl,
+                clUrl,
+                extraUrls
+            };
+
+            const res = await API.submitStudentApplication(applicationData);
+            if (!res.success) throw new Error();
+            this.showSuccess();
+        } catch (err) {
+            console.error('Upload failed:', err);
+            this.showError();
+        }
+    }
+
+    private async uploadFileToMake(file: File): Promise<string> {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch('https://hook.eu2.make.com/xw5s6su89ha7ezdta4rn92smta4zrrvm', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error(`Upload failed: ${response.status}`);
+        }
+
+        const result = await response.json();
+        return result.fileUrl;
+    }
 
     showSuccess() {
 		const root = this.querySelector('#parent');
@@ -113,4 +158,5 @@ export class ApplicationForm extends HTMLElement {
 			`
         }
 	}
+
 }

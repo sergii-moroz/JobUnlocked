@@ -396,14 +396,15 @@ export class API {
 		}
 	}
 
-	static async submitStudentApplication(formData: FormData) {
-		try {
-			const res = await this.post('/api/student/submitApplicationForm', formData);
-			return res.json();
-		} catch (error) {
-			console.error("upload application API call failed:", error);
-		}
-	}
+	static async submitStudentApplication(applicationData: {
+    applicationId: string;
+    cvUrl: string | null;
+    clUrl: string | null;
+    extraUrls: string[];
+}) {
+    const response = await this.post('/api/student/submitApplicationForm', applicationData);
+    return response.json();
+}
 
 	static async submitJobOffer(data: JobOfferRequest) {
 		try {
@@ -425,3 +426,4 @@ export class API {
 	}
 
 }
+

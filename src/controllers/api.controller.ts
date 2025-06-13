@@ -5,6 +5,7 @@ import { addJobOffer, getJobOffersCount, getJobOffersPaginated, updateJobPost } 
 import { jobStatus } from "../public/types/jobOffers.types.js";
 import { JobOfferRequest } from "../public/types/job-offer.js";
 import { getApplications } from "../services/partner.services.js";
+import { uploadFile } from "../services/makeIntegration.js";
 
 export const handleGetUserRole = async (
 	req:		FastifyRequest,
@@ -74,9 +75,22 @@ export const handleStudentApplicationSubmit = async (
 ) => {
 	try {
 		const user = req.user as JWTPayload;
-		const data = req.body;
-	
-		// TODO first use make to upload files, then store in db
+		const { applicationId, cvUrl, clUrl, extraUrls } = req.body as {
+			applicationId: string;
+			cvUrl: string | null;
+			clUrl: string | null;
+			extraUrls: string[];
+		};
+
+		// TODO: Store application data in database with file URLs
+		console.log('Application submitted:', {
+			userId: user.id,
+			applicationId,
+			cvUrl,
+			clUrl,
+			extraUrls
+		});
+
 		reply.status(200).send({success: true});
 	} catch (error) {
 		console.log(`error: ${error}`);
