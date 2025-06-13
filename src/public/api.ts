@@ -156,7 +156,7 @@ export class API {
 	}
 
 	static async getJobList(page: number = 1, page_size: number = 5, job_status: jobStatus = jobStatus.approved) {
-		const response = await this.get(`/api/general-jobs?page=${page}&page_size=${page_size}&job_status=${job_status}`);
+		const response = await this.get(`/api/jobs?page=${page}&page_size=${page_size}&job_status=${job_status}`);
 		return response;
   }
 
