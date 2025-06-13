@@ -20,51 +20,47 @@ export class ApplicationForm extends HTMLElement {
 
     private render() {
         this.innerHTML = `
-        <div id='parent' class="max-w-xl mx-auto mt-12 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-			<h2 class="text-3xl font-extrabold text-gray-800 text-center mb-3">Apply for the position</h2>
-			<p class="text-sm text-gray-600 text-center mb-6">
-				Please upload your documents below. <br>Submitting this form is your official application.
-			</p>
+			<div id='parent' class="tw-card max-w-xl mx-auto mt-12 p-8 rounded-2xl border border-gray-100 bg-white dark:bg-gray-800 shadow-xl dark:shadow-none">
+				<h2 class="text-3xl font-extrabold text-gray-800 dark:text-white text-center mb-3">Apply for the position</h2>
+				<p class="text-sm text-gray-600 dark:text-gray-300 text-center mb-6">
+					Please upload your documents below. <br>Submitting this form is your official application.
+				</p>
 
-			<form id="application-form" class="space-y-6" enctype="multipart/form-data">
+				<form id="application-form" class="flex flex-col gap-4" enctype="multipart/form-data">
 
-				<!-- CV Upload -->
-				<div>
-					<label for="cv" class="block text-sm font-medium text-gray-700 mb-1">CV</label>
-					<input type="file" id="cv" name="cv" accept=".pdf" required
-						class="block w-full text-sm text-gray-600 rounded-md border border-gray-300 shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition" />
+					<!-- CV Upload -->
+					<label class="mb-2 text-gray-700 dark:text-gray-200">CV
+						<input type="file" id="cv" name="cv" accept=".pdf" required
+							class="tw-input w-full file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200 dark:hover:file:bg-blue-800" />
+					</label>
+
+					<!-- Cover Letter Upload -->
+					<label class="mb-2 text-gray-700 dark:text-gray-200">Cover Letter
+						<input type="file" id="cl" name="cl" accept=".pdf" required
+							class="tw-input w-full file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200 dark:hover:file:bg-blue-800" />
+					</label>
+
+					<!-- Extra Files Upload -->
+					<label class="mb-2 text-gray-700 dark:text-gray-200">Additional Documents
+						<input type="file" id="extra" name="extra" accept=".pdf" multiple
+							class="tw-input w-full file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 dark:file:bg-gray-800 dark:file:text-gray-300 dark:hover:file:bg-gray-700" />
+					</label>
+
+					<!-- Buttons -->
+					<div class="flex justify-center gap-4 mt-6">
+						<a href="/home" data-link class="tw-btn-outline w-2/6 min-w-[140px] text-center">Cancel</a>
+						<button type="submit" class="tw-btn w-2/6 min-w-[140px] text-center">
+							Submit
+						</button>
+					</div>
+				</form>
+
+				<!-- Notes -->
+				<div class="mt-6 space-y-2 text-sm text-gray-500 dark:text-gray-400 text-center italic">
+					<p>📌 Only PDF files are accepted. Please ensure your uploads are in .pdf format.</p>
+					<p>🔒 Your personal information (name, email, etc.) is automatically imported from your Intra profile. Make sure it’s up to date before applying.</p>
 				</div>
-
-				<!-- Cover Letter Upload -->
-				<div>
-					<label for="cl" class="block text-sm font-medium text-gray-700 mb-1">Cover Letter</label>
-					<input type="file" id="cl" name="cl" accept=".pdf" required
-						class="block w-full text-sm text-gray-600 rounded-md border border-gray-300 shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition" />
-				</div>
-
-				<!-- Extra Files Upload -->
-				<div>
-					<label for="extra" class="block text-sm font-medium text-gray-700 mb-1">Additional Documents</label>
-					<input type="file" id="extra" name="extra" accept=".pdf" multiple
-						class="block w-full text-sm text-gray-600 rounded-md border border-gray-300 shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 transition" />
-				</div>
-
-				<!-- Buttons -->
-				<div class="pt-6 flex justify-between items-center">
-					<a href="/home" data-link class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">Cancel</a>
-					<button type="submit"
-						class="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-						Submit Application
-					</button>
-				</div>
-			</form>
-
-			<!-- Notes -->
-			<div class="mt-6 space-y-2 text-sm text-gray-500 text-center italic">
-				<p>📌 Only PDF files are accepted. Please ensure your uploads are in .pdf format.</p>
-				<p>🔒 Your personal information (name, email, etc.) is automatically imported from your Intra profile. Make sure it’s up to date before applying.</p>
 			</div>
-		</div>
         `;
     }
 
