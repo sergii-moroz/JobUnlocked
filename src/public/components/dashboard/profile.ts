@@ -2,6 +2,7 @@ import { API } from "../../api.js"
 
 export class Profile extends HTMLElement {
 	private UserInfo: any; // Define the type according to your API response
+	private UserRole: number | undefined; // Optional, if you need to handle user roles
 
 	constructor() {
 		super();
@@ -10,9 +11,14 @@ export class Profile extends HTMLElement {
 	async connectedCallback() {
 		this.loadingRender();
 		const response = await API.get42UserInfo() // replace with corresponding function
+		const userRoleResponse = await API.getUserRole(); // Fetch user role if needed
 		if (response.success) {
 			this.UserInfo = response.data;
-			this.render();
+			this.UserRole = userRoleResponse.success ? userRoleResponse.role : null; // Handle user role if needed
+			if(this.UserRole && this.UserRole != 2)
+				this.render();
+			else
+				this.errorRender(); // or Router.navigateTo('/home')
 		} else {
 			this.errorRender(); // or Router.navigateTo('/home')
 		}
