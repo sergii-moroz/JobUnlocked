@@ -63,6 +63,22 @@ export const getJobOffersPaginated = async (
 	})
 }
 
+export const approveJobOffer = async (
+	id: string,
+	approval: string
+): Promise<void> => {
+	return new Promise((resolve, reject) => {
+		const sql = `UPDATE jobPosts SET approved_by = ?, approval_date = ? WHERE id = ?`
+		db.run(sql, [approval, id], function(err) {
+			if (err) return reject(err);
+			if (this.changes === 0) {
+				reject(new Error(`No job post found with id ${id}`));
+			} else {
+				resolve();
+			}
+		});
+	})
+}
 
 export const updateJobPost = async (
 	id: string,
@@ -90,7 +106,7 @@ export const updateJobPost = async (
 
 export const addJobOffer = async (jobOffer: JobOfferRequest, user_id: string): Promise<void> => {
 	const id = crypto.randomUUID()
-	
+
 	return new Promise((resolve, reject) => {
 		db.run(
 			`INSERT INTO jobPosts (id, partner_id, title, description, requirements, location, type, job_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,

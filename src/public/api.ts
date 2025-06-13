@@ -1,3 +1,4 @@
+import { UUID } from "crypto"
 import { JobOfferRequest } from "./types/job-offer.js"
 import { jobStatus } from "./types/jobOffers.types.js"
 
@@ -163,6 +164,14 @@ export class API {
 
 	static async updateJob(job: {id: string, title: string, description: string, location: string, company: string, requirements: string}) {
 		const response = await this.post('/api/update/job/offer', {job}, { includeCSRF: true })
+	}
+
+	static async approveOffer(id: string) {
+		const response = await this.post('/api/approve/job/offer', { id }, { includeCSRF: true })
+	}
+
+	static async rejectOffer(id: string) {
+		//
 	}
 
 	// static async getGeneralJob(page: number = 1, page_size: number = 5, job_status: jobStatus = jobStatus.approved) {
