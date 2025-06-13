@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
 import { authenticate, checkCsrf } from "../controllers/auth.controllers.js"
-import { handleGetJobs, handleGetUserRole, handleJobOfferSubmit, handleStudentApplicationSubmit } from "../controllers/api.controller.js"
+import { handleGetJobs, handleGetUserRole, handleJobOfferSubmit, handleStudentApplicationSubmit, handleUpdateJobOffer } from "../controllers/api.controller.js"
 
 // import { handleGetJobOffersForStudents } from "../controllers/jobOffers.controller.js"
 

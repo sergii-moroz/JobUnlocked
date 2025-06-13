@@ -34,7 +34,7 @@ export class HomePageParthner extends HTMLElement {
 	private render() {
 		this.innerHTML = `
 		<div>
-			<button id="btn-new-job" class="tw-btn">Create Job Offer</button>
+			<a href="/jobOffers" data-link class="tw-btn">Create Job Offer</a>
 		<div>
 		<div class="flex gap-2 h-[calc(100dvh-64px)] mx-2">
 			<div id="jobList" class="w-[40%] h-full overflow-y-auto space-y-2"></div>
