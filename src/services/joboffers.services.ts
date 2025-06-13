@@ -43,7 +43,7 @@ export const getJobOffersPaginated = async (
 				jp.title,
 				jp.description,
 				jp.requirements,
-				jp.approval_date,
+				jp.created_at,
 				jp.location,
 				p.first_name,
 				p.last_name,
