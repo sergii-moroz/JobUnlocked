@@ -1,4 +1,5 @@
 import { API } from "../../api.js"
+import { Router } from "../../router.js";
 import { JobType } from "../../types/enums.js";
 import { JobOffer } from "../../types/job-offer.js";
 import { jobStatus } from "../../types/jobOffers.types.js";
@@ -32,6 +33,9 @@ export class HomePageParthner extends HTMLElement {
 
 	private render() {
 		this.innerHTML = `
+		<div>
+			<button id="btn-new-job" class="tw-btn">Create Job Offer</button>
+		<div>
 		<div class="flex gap-2 h-[calc(100dvh-64px)] mx-2">
 			<div id="jobList" class="w-[40%] h-full overflow-y-auto space-y-2"></div>
 			<div id="jobDetails" class="w-[60%] h-full overflow-y-auto mb-4"></div>
@@ -54,7 +58,7 @@ export class HomePageParthner extends HTMLElement {
 		}
 
 		if (target.id === "save-btn") {
-			// this.saveJobEdits();
+			this.saveJobEdits();
 			return;
 		}
 
@@ -63,6 +67,10 @@ export class HomePageParthner extends HTMLElement {
 			if (job) this.renderJobDetails(job);
 			this.editingJobId = null;
 			return;
+		}
+
+		if (target.id ==="btn-new-job") {
+			this.renderJobEditForm(null);
 		}
 
 		const jobElement = target.closest('.tw-list-entry');
@@ -109,26 +117,26 @@ export class HomePageParthner extends HTMLElement {
 		`;
 	}
 
-	private renderJobEditForm(job: JobOffer) {
+	private renderJobEditForm(job: JobOffer | null) {
 		const detailsContainer = this.querySelector('#jobDetails');
 		if (!detailsContainer) return;
 
 		detailsContainer.innerHTML = `
 			<form id="edit-job-form" class="bg-white dark:bg-gray-800 rounded-2xl shadow p-8 m-2 mt-0 w-full h-full flex flex-col">
 				<label class="mb-2 text-gray-700 dark:text-gray-200">Title
-					<input name="title" class="tw-input w-full" value="${job.title}" required />
+					<input name="title" class="tw-input w-full" value="${job?.title || ''}" required />
 				</label>
 				<label class="mb-2 text-gray-700 dark:text-gray-200">Location
-					<input name="location" class="tw-input w-full" value="${job.location}" required />
+					<input name="location" class="tw-input w-full" value="${job?.location || ''}" required />
 				</label>
 				<label class="mb-2 text-gray-700 dark:text-gray-200">Company
-					<input name="company" class="tw-input w-full bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed" value="${job.company}" readonly />
+					<input name="company" class="tw-input w-full bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed" value="${job?.company || ''}" readonly />
 				</label>
 				<label class="mb-2 text-gray-700 dark:text-gray-200">Description
-					<textarea name="description" class="tw-input w-full" required>${job.description}</textarea>
+					<textarea name="description" class="tw-input w-full" required>${job?.description || ''}</textarea>
 				</label>
 				<label class="mb-2 text-gray-700 dark:text-gray-200">Requirements
-					<textarea name="requirements" class="tw-input w-full" required>${job.requirements}</textarea>
+					<textarea name="requirements" class="tw-input w-full" required>${job?.requirements || ''}</textarea>
 				</label>
 				<div class="mt-auto flex-col">
 					<div class="flex justify-center w-full">
@@ -157,7 +165,7 @@ export class HomePageParthner extends HTMLElement {
 			// Add other fields as needed
 		};
 
-		// await API.updateJob(updatedJob); // Implement this in your API
+		await API.updateJob(updatedJob); // Implement this in your API
 		const jobIndex = this.JobList.findIndex(j => j.id === this.editingJobId);
 		if (jobIndex !== -1) this.JobList[jobIndex] = { ...this.JobList[jobIndex], ...updatedJob };
 		this.renderJobDetails(this.JobList[jobIndex]);

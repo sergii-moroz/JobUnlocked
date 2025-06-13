@@ -61,3 +61,27 @@ export const getJobOffersPaginated = async (
 		)
 	})
 }
+
+export const updateJobPost = async (
+	id: string,
+	title: string,
+	description: string,
+	location: string,
+	requirements: string
+): Promise<void> => {
+	return new Promise((resolve, reject) => {
+		const sql = `
+				UPDATE jobPosts SET title = ?, description = ?, location = ?, requirements = ?
+				WHERE id = ?
+		`;
+
+		db.run(sql, [title, description, location, requirements, id], function(err) {
+			if (err) return reject(err);
+			if (this.changes === 0) {
+				reject(new Error(`No job post found with id ${id}`));
+			} else {
+				resolve();
+			}
+		});
+	});
+};

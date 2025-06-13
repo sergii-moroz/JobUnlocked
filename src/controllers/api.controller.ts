@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { JWTPayload } from "../types/user.types.js";
-import { getJobOffersCount, getJobOffersPaginated } from "../services/joboffers.services.js";
+import { getJobOffersCount, getJobOffersPaginated, updateJobPost } from "../services/joboffers.services.js";
 import { jobStatus } from "../public/types/jobOffers.types.js";
 
 export const handleGetUserRole = async (
@@ -43,5 +43,23 @@ export const handleGetJobs = async (
 		reply.send(replyData)
 	} catch (err) {
 		throw err
+	}
+}
+
+export const handleUpdateJobOffer = async (
+	req:		FastifyRequest,
+	reply:	FastifyReply
+) => {
+	try {
+		const { job } = req.body as any
+		console.log("id", req.body)
+		const user = req.user as JWTPayload
+		const jobOffers = await updateJobPost(job.id, job.title, job.description, job.location, job.requirements)
+		reply.send({
+			success: true,
+			message: "Job post updated successfully"
+		})
+	} catch (error) {
+		throw error
 	}
 }
