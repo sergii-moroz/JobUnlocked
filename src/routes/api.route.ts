@@ -1,6 +1,9 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
-import { handleGetApplications, handleGetJobs, handleGetUserRole, handleJobOfferSubmit, handleStudentApplicationSubmit } from "../controllers/api.controller.js"
-import { authenticate } from "../controllers/auth.controllers.js"
+import { handleGetApplications, handleGetJobs, handleGetUserRole, handleJobOfferSubmit, handleStudentApplicationSubmit, handleUpdateJobOffer } from "../controllers/api.controller.js"
+import { authenticate, checkCsrf } from "../controllers/auth.controllers.js"
+import { db } from "../db/connections.js"
+import { jobStatus } from "../public/types/jobOffers.types.js"
+
 // import { handleGetJobOffersForStudents } from "../controllers/jobOffers.controller.js"
 
 export const apiRoutes = async (app: FastifyInstance, opts: FastifyPluginOptions) => {
@@ -17,6 +20,12 @@ export const apiRoutes = async (app: FastifyInstance, opts: FastifyPluginOptions
 		handler: handleGetJobs
 	})
 
+
+	app.post('/update/job/offer', {
+		preHandler: [authenticate, checkCsrf],
+		handler: handleUpdateJobOffer
+	})
+
 	app.post('/student/submitApplicationForm', {
 		preHandler: [authenticate],
 		handler: handleStudentApplicationSubmit
@@ -27,8 +36,22 @@ export const apiRoutes = async (app: FastifyInstance, opts: FastifyPluginOptions
 		handler: handleJobOfferSubmit
 	})
 
+
 	app.post('/company/getApplications', {
 		preHandler: [authenticate],
 		handler: handleGetApplications
+
+	app.post('/approve/job/offer', {preHandler: [authenticate, checkCsrf]}, async (req, reply) => {
+		const { id } = req.params as {id: any}
+    try {
+        await db.run(`
+            UPDATE jobPosts
+            SET job_status = ?, approved_by = ?, approval_date = CURRENT_TIMESTAMP
+            WHERE id = ?
+        `, [jobStatus.approved, req.user.id, id]);
+        return { success: true };
+    } catch (error) {
+        reply.status(500).send({ error: 'Failed to approve job' });
+    }
 	})
 }
