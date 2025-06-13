@@ -2,10 +2,8 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { JWTPayload } from "../types/user.types.js";
 import { addJobOffer, getJobOffersCount, getJobOffersPaginated, updateJobPost } from "../services/joboffers.services.js";
 
-import { jobStatus } from "../public/types/jobOffers.types.js";
 import { JobOfferRequest } from "../public/types/job-offer.js";
-import { getApplications } from "../services/partner.services.js";
-import { uploadFile } from "../services/makeIntegration.js";
+import { addNewApplication, getApplications } from "../services/partner.services.js";
 
 export const handleGetUserRole = async (
 	req:		FastifyRequest,
@@ -82,7 +80,6 @@ export const handleStudentApplicationSubmit = async (
 			extraUrls: string[];
 		};
 
-		// TODO: Store application data in database with file URLs
 		console.log('Application submitted:', {
 			userId: user.id,
 			applicationId,
@@ -90,6 +87,11 @@ export const handleStudentApplicationSubmit = async (
 			clUrl,
 			extraUrls
 		});
+
+		if (!applicationId || !cvUrl || !clUrl)
+			throw new Error('aplication not valid');
+
+		await addNewApplication(user.id, applicationId, clUrl, cvUrl);
 
 		reply.status(200).send({success: true});
 	} catch (error) {
