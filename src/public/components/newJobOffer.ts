@@ -50,20 +50,9 @@ export class JobOfferForm extends HTMLElement {
 
 				<!-- Real Location -->
 				<div>
-					<label for="location" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+					<label for="location" class="block text-sm font-medium text-gray-700 mb-1">Location(on-site or remote in brackets)</label>
 					<input type="text" id="location" name="location"
 						class="w-full px-4 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g. Berlin, Germany" />
-				</div>
-
-				<!-- Work Mode -->
-				<div>
-					<label for="mode" class="block text-sm font-medium text-gray-700 mb-1">Work Type</label>
-					<select id="mode" name="mode"
-						class="w-full px-4 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
-						<option value="remote">Remote</option>
-						<option value="on-site">On-site</option>
-						<option value="hybrid">Hybrid</option>
-					</select>
 				</div>
 
 				<!-- Type of Position -->
@@ -80,9 +69,9 @@ export class JobOfferForm extends HTMLElement {
 
 				<!-- Buttons -->
 				<div class="pt-6 flex justify-between items-center">
-					<a href="/home" data-link class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">Cancel</a>
+					<a href="/home" data-link class="tw-btn-outline">Cancel</a>
 					<button type="submit"
-						class="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+						class="tw-btn">
 						Post Offer
 					</button>
 				</div>

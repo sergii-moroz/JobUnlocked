@@ -32,10 +32,11 @@ export class HomePageParthner extends HTMLElement {
 	}
 
 	private render() {
+		// <div>
+		// 	<a href="/jobOffers" data-link class="tw-btn-outline flex items-center justify-center
+		// 	px-5 py-4 w-full mb-2 text-lg font-bold">Create Job Offer</a>
+		// <div>
 		this.innerHTML = `
-		<div>
-			<a href="/jobOffers" data-link class="tw-btn">Create Job Offer</a>
-		<div>
 		<div class="flex gap-2 h-[calc(100dvh-64px)] mx-2">
 			<div id="jobList" class="w-[40%] h-full overflow-y-auto space-y-2"></div>
 			<div id="jobDetails" class="w-[60%] h-full overflow-y-auto mb-4"></div>
@@ -177,6 +178,15 @@ export class HomePageParthner extends HTMLElement {
 		if (!root) return;
 		root.innerHTML = ``;
 
+		const createBtn = document.createElement('a');
+		createBtn.href = "/jobOffers";
+		createBtn.setAttribute('data-link', '');
+		createBtn.className = `
+			tw-btn-outline flex items-center justify-center
+			px-5 py-4 w-full mb-2 text-lg font-bold
+		`.replace(/\s+/g, ' ');
+		createBtn.textContent = "＋ Create Job Offer";
+		root.appendChild(createBtn);
 
 		this.JobList.forEach((job: JobOffer) => {
 			const jobElement = document.createElement('div');
@@ -201,6 +211,7 @@ export class HomePageParthner extends HTMLElement {
 			`;
 			root.appendChild(jobElement);
 		});
+
 	}
 
 	async loadJobList() {
