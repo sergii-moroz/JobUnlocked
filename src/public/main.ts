@@ -4,6 +4,7 @@
 // import { TwoFARegisterGA } from "./components/2fa/2fa-register-ga.js";
 // import { TwoFAVerifyGA } from "./components/2fa/2fa-verify-ga.js";
 // import { Button2FA } from "./components/2fa/button-2fa.js";
+import { applicantList } from "./components/applicantList.js";
 import { ButtonThemeToggle } from "./components/button-theme-toggle.js";
 import { HomeHeader } from "./components/home-page/header.js";
 import { HomePageParthner } from "./components/home-page/home-page-partner.js";
@@ -92,5 +93,6 @@ customElements.define('home-header', HomeHeader);
 // customElements.define('tournament-room', Tournament)
 customElements.define('application-form', ApplicationForm);
 customElements.define('job-offer-form', JobOfferForm);
+customElements.define('applicant-list', applicantList);
 
 Router.init()

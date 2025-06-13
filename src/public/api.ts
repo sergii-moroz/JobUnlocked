@@ -1,3 +1,4 @@
+import { applicationType } from "./types/applicants.js"
 import { JobOfferRequest } from "./types/job-offer.js"
 import { jobStatus } from "./types/jobOffers.types.js"
 
@@ -400,5 +401,14 @@ export class API {
 		}
 	}
 
+	static async getApplications(jobOfferID: string) {
+		try {
+			const res = await this.post('/api/company/getApplications', {jobOfferID});
+			return res.json();
+		} catch (error) {
+			console.error("fetching Applications API call failed:", error);
+			return null;
+		}
+	}
 
 }

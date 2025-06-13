@@ -3,6 +3,7 @@ import { JWTPayload } from "../types/user.types.js";
 import { addJobOffer, getJobOffersCount, getJobOffersPaginated } from "../services/joboffers.services.js";
 import { jobStatus } from "../public/types/jobOffers.types.js";
 import { JobOfferRequest } from "../public/types/job-offer.js";
+import { getApplications } from "../services/partner.services.js";
 
 export const handleGetUserRole = async (
 	req:		FastifyRequest,
@@ -71,6 +72,31 @@ export const handleJobOfferSubmit = async (
 		const data = req.body as JobOfferRequest;
 		await addJobOffer(data, req.user.id);
 		reply.status(200).send({success: true});
+	} catch (error) {
+		console.log(`error: ${error}`);
+		reply.status(400).send({success: false});
+	}
+}
+
+export const handleGetApplications = async (
+	req: FastifyRequest<{ Body: { jobOfferID: string } }>,
+	reply: FastifyReply 
+) => {
+	try {
+		const { jobOfferID } = req.body;
+
+		if (!jobOfferID) {
+			return reply.status(400).send({ 
+				success: false, 
+				error: "jobOfferID is required" 
+			});
+		}
+		const applications = await getApplications(jobOfferID)
+		const answer = {
+			applications,
+			success: true
+		};
+		reply.status(200).send(answer);
 	} catch (error) {
 		console.log(`error: ${error}`);
 		reply.status(400).send({success: false});

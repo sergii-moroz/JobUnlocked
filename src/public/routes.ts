@@ -25,7 +25,13 @@ export const routes: tRoutes = {
 	},
 
 	"/application-form/:": {
-		template: "/templates/student/applications.html",
+		template: "/templates/student/applicantList.html",
+		title: `${APP_TITLE}`,
+		description: "Landing page"
+	},
+
+	"/applicant-list/:": {
+		template: "/templates/applicantList.html",
 		title: `${APP_TITLE}`,
 		description: "Landing page"
 	},

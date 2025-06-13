@@ -102,7 +102,7 @@ export class HomePageParthner extends HTMLElement {
 					</div>
 					<div class="flex justify-center w-full">
 						<button class="tw-btn-outline w-2/6 min-w-[140px] mx-auto" id="edit-btn" data-job-id="${job.id}">Edit</button>
-						<a href="/application-form/${job.id}" class="tw-btn w-2/6 min-w-[140px] mx-auto" id="view-btn">View applications</a>
+						<a href="/applicant-list/${job.id}" class="tw-btn w-2/6 min-w-[140px] mx-auto" id="view-btn">View applications</a>
 					</div>
 				</div>
 			</div>

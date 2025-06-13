@@ -5,7 +5,7 @@ export async function up() {
 		const items = [
 			{
 				student_id: "uuid-student-1",
-				job_id: "uuid-job-1",
+				job_id: "uuid-jobpost-1",
 				cover_letter: 'path_to_cover_letter',
 				cv: 'path_to_cv',
 				status: 1,
