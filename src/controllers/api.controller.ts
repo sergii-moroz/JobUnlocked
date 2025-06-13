@@ -5,6 +5,7 @@ import { addJobOffer, approveJob, getJobOffersCount, getJobOffersPaginated, reje
 import { JobOfferRequest } from "../public/types/job-offer.js";
 import { addNewApplication, getApplications } from "../services/partner.services.js";
 import { InsufficientPermissionError } from "../errors/middleware.errors.js";
+import { sendEmail } from "../services/email.service.js";
 
 import {
 	determineUserRole,
@@ -116,9 +117,68 @@ export const handleStudentApplicationSubmit = async (
 		});
 
 		if (!applicationId || !cvUrl || !clUrl)
-			throw new Error('aplication not valid');
+			throw new Error('application not valid');
 
 		await addNewApplication(user.id, applicationId, clUrl, cvUrl);
+		// Fetch partner info
+		const partnerInfo = await getJobPostPartnerInfo(applicationId);
+		// Create formatted email content with clickable links
+            const partnerEmailBody = `
+				<h3>Dear Partner,</h3>
+
+				<p>A new application has been submitted by ${user.id} for job ${applicationId}.</p>
+
+				<p>Please review the application documents:</p>
+
+				<ul>
+					<li>📄 CV: <a href="${cvUrl}" target="_blank">Download CV</a></li>
+					<li>📝 Cover Letter: <a href="${clUrl}" target="_blank">Download Cover Letter</a></li>
+				</ul>
+
+				<p>Please check your dashboard to review the complete application.</p>
+
+				<p>Best regards,</p>
+				<p>JobUnlocked Team</p>
+			`.trim();
+
+			const studentEmailBody = `
+				<h3>Dear ${user.id},</h3>
+
+				<p>Your application for job ${applicationId} has been successfully submitted!</p>
+
+				<p>Your submitted documents:</p>
+				<ul>
+					<li>📄 CV: <a href="${cvUrl}" target="_blank">View your CV</a></li>
+					<li>📝 Cover Letter: <a href="${clUrl}" target="_blank">View your Cover Letter</a></li>
+				</ul>
+
+				<p>We will notify you once it's reviewed.</p>
+
+				<p>Best regards,</p>
+				<p>JobUnlocked Team</p>
+			`.trim();
+
+		// Send email notifications
+		try {
+			// Send notification to admin/partner (replace with actual partner email)
+			await sendEmail(
+				"olanokhin@gmail.com", // Replace with actual partner email
+				"New Job Application Received",
+				partnerEmailBody
+			);
+			
+			// Send confirmation to student
+			await sendEmail(
+				"olanokhin@gmail.com",
+				"Application Submitted Successfully",
+				studentEmailBody
+			);
+
+			console.log('Email notifications sent successfully');
+		} catch (emailError) {
+			console.error('Failed to send email notifications:', emailError);
+			// Don't fail the entire request if emails fail
+		}
 
 		reply.status(200).send({success: true});
 	} catch (error) {
@@ -222,3 +282,27 @@ export const handleRejectJob = async (
 		reply.status(400).send({success: false});
 	}
 }
+
+import { db } from "../db/connections.js";
+export const getJobPostPartnerInfo = async (
+			jobId: string
+			): Promise<{ partner_id: string; email: string } | null> => {
+			return new Promise((resolve, reject) => {
+				db.get<{ partner_id: string; email: string }>(
+				`SELECT
+					jp.partner_id,
+					u.email
+				FROM jobPosts jp
+				JOIN users u ON jp.partner_id = u.id
+				WHERE jp.id = ?`,
+				[jobId],
+				(err, row) => {
+					if (err) {
+					console.error('Database error:', err);
+					return reject(new Error('Failed to fetch partner info'));
+					}
+					resolve(row || null);
+				}
+				);
+			});
+			};
