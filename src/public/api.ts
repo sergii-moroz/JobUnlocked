@@ -1,3 +1,4 @@
+import { JobOfferRequest } from "./types/job-offer.js"
 import { jobStatus } from "./types/jobOffers.types.js"
 
 export class API {
@@ -381,6 +382,23 @@ export class API {
 		}
 	}
 
+	static async submitStudentApplication(formData: FormData) {
+		try {
+			const res = await this.post('/api/student/submitApplicationForm', formData);
+			return res.json();
+		} catch (error) {
+			console.error("upload application API call failed:", error);
+		}
+	}
+
+	static async submitJobOffer(data: JobOfferRequest) {
+		try {
+			const res = await this.post('/api/company/submitJobOffer', data);
+			return res.json();
+		} catch (error) {
+			console.error("upload JobOffer API call failed:", error);
+		}
+	}
 
 
 }

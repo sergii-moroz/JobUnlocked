@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { JWTPayload } from "../types/user.types.js";
-import { getJobOffersCount, getJobOffersPaginated } from "../services/joboffers.services.js";
+import { addJobOffer, getJobOffersCount, getJobOffersPaginated } from "../services/joboffers.services.js";
 import { jobStatus } from "../public/types/jobOffers.types.js";
+import { JobOfferRequest } from "../public/types/job-offer.js";
 
 export const handleGetUserRole = async (
 	req:		FastifyRequest,
@@ -43,5 +44,35 @@ export const handleGetJobs = async (
 		reply.send(replyData)
 	} catch (err) {
 		throw err
+	}
+}
+
+export const handleStudentApplicationSubmit = async (
+	req: FastifyRequest,
+	reply: FastifyReply 
+) => {
+	try {
+		const user = req.user as JWTPayload;
+		const data = req.body;
+	
+		// TODO first use make to upload files, then store in db
+		reply.status(200).send({success: true});
+	} catch (error) {
+		console.log(`error: ${error}`);
+		reply.status(400).send({success: false});
+	}
+}
+
+export const handleJobOfferSubmit = async (
+	req: FastifyRequest,
+	reply: FastifyReply 
+) => {
+	try {
+		const data = req.body as JobOfferRequest;
+		await addJobOffer(data, req.user.id);
+		reply.status(200).send({success: true});
+	} catch (error) {
+		console.log(`error: ${error}`);
+		reply.status(400).send({success: false});
 	}
 }

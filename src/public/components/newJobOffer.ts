@@ -1,6 +1,9 @@
+import { API } from "../api.js";
+import { JobType } from "../types/enums.js";
+import { JobOfferRequest } from "../types/job-offer.js";
+
 export class JobOfferForm extends HTMLElement {
 	form: HTMLFormElement | null = null;
-	cancel: HTMLElement | null = null;
 
 	constructor() {
 		super();
@@ -9,14 +12,11 @@ export class JobOfferForm extends HTMLElement {
 
 	connectedCallback() {
 		this.form = this.querySelector('#job-offer-form');
-		this.cancel = this.querySelector('#cancel-btn');
 		this.form?.addEventListener('submit', this.submitHandler);
-		this.cancel?.addEventListener('click', this.backToHome);
 	}
 
 	disconnectedCallback() {
 		this.form?.removeEventListener('submit', this.submitHandler);
-		this.cancel?.removeEventListener('click', this.backToHome);
 	}
 
 	private render() {
@@ -71,17 +71,16 @@ export class JobOfferForm extends HTMLElement {
 					<label for="type" class="block text-sm font-medium text-gray-700 mb-1">Position Type</label>
 					<select id="type" name="type"
 						class="w-full px-4 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
-						<option value="job">Job</option>
-						<option value="internship">Internship</option>
+						<option value="1">FullTime</option>
+						<option value="2">PartTime</option>
+						<option value="3">Internship</option>
+						<option value="4">WorkingStudent</option>
 					</select>
 				</div>
 
 				<!-- Buttons -->
 				<div class="pt-6 flex justify-between items-center">
-					<button type="button" id='cancel-btn'
-						class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
-						Cancel
-					</button>
+					<a href="/home" data-link class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">Cancel</a>
 					<button type="submit"
 						class="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
 						Post Offer
@@ -97,19 +96,21 @@ export class JobOfferForm extends HTMLElement {
 		const formEl = e.target as HTMLFormElement;
 		const formData = new FormData(formEl);
 
-		const payload = Object.fromEntries(formData.entries());
+		// const payload = Object.fromEntries(formData.entries());
+		const payload: JobOfferRequest = {
+			title: formData.get("title") as string,
+			description: formData.get("description") as string,
+			requirements: formData.get("requirements") as string,
+			location: formData.get("location") as string,
+			type: parseInt(formData.get("type") as string) as JobType,
+		}
 
 		try {
-			// await API.submitJobOffer(payload)
+			await API.submitJobOffer(payload)
 			this.showSuccess();
-			formEl.reset();
 		} catch (err) {
 			this.showError();
 		}
-	};
-
-	backToHome = () => {
-		// Router.navigateTo("/home");
 	};
 
 	showSuccess() {
