@@ -7,6 +7,12 @@ import { addNewApplication, getApplications } from "../services/partner.services
 import { InsufficientPermissionError } from "../errors/middleware.errors.js";
 import { sendEmail } from "../services/email.service.js";
 
+import {
+	determineUserRole,
+	get42AccessToken,
+	get42UserInfo,
+} from "../services/42.services.js";
+
 export const handleGetUserRole = async (
 	req:		FastifyRequest,
 	reply:	FastifyReply
@@ -50,6 +56,24 @@ export const handleGetJobs = async (
 	}
 }
 
+export const handle42UserInfo = async (
+	req:		FastifyRequest<{ Querystring: { code: string } }>,
+	reply:	FastifyReply
+) => {
+	try {
+		if(!req.cookies.access_token_42) {
+			return reply.status(401).send({ success: false, error: "Unauthorized" });
+		}
+		const userInfo = await get42UserInfo(req.cookies.access_token_42);
+		reply.send({
+			success: true,
+			data: userInfo
+		});
+	} catch (error) {
+		throw error
+	}
+}
+
 
 export const handleUpdateJobOffer = async (
 	req:		FastifyRequest,
@@ -72,7 +96,7 @@ export const handleUpdateJobOffer = async (
 
 export const handleStudentApplicationSubmit = async (
 	req: FastifyRequest,
-	reply: FastifyReply 
+	reply: FastifyReply
 ) => {
 	try {
 		if (req.user.role !== userRoles.studen) throw new InsufficientPermissionError();
@@ -165,7 +189,7 @@ export const handleStudentApplicationSubmit = async (
 
 export const handleJobOfferSubmit = async (
 	req: FastifyRequest,
-	reply: FastifyReply 
+	reply: FastifyReply
 ) => {
 	try {
 		if (req.user.role !== userRoles.partner) throw new InsufficientPermissionError();
@@ -180,16 +204,16 @@ export const handleJobOfferSubmit = async (
 
 export const handleGetApplications = async (
 	req: FastifyRequest<{ Body: { jobOfferID: string } }>,
-	reply: FastifyReply 
+	reply: FastifyReply
 ) => {
 	try {
 		if (req.user.role !== userRoles.partner) throw new InsufficientPermissionError();
 		const { jobOfferID } = req.body;
 
 		if (!jobOfferID) {
-			return reply.status(400).send({ 
-				success: false, 
-				error: "jobOfferID is required" 
+			return reply.status(400).send({
+				success: false,
+				error: "jobOfferID is required"
 			});
 		}
 		const applications = await getApplications(jobOfferID)
@@ -207,7 +231,7 @@ export const handleGetApplications = async (
 
 export const handleApproveJob = async (
 	req: FastifyRequest<{ Body: { jobOfferID: string } }>,
-	reply: FastifyReply 
+	reply: FastifyReply
 ) => {
 	try {
 		if (req.user.role !== userRoles.stuff) throw new InsufficientPermissionError();
@@ -215,12 +239,12 @@ export const handleApproveJob = async (
 		console.log("jobid: ", jobOfferID);
 		console.log(req.user.id);
 		if (!jobOfferID) {
-			return reply.status(400).send({ 
-				success: false, 
-				error: "jobOfferID is required" 
+			return reply.status(400).send({
+				success: false,
+				error: "jobOfferID is required"
 			});
 		}
-		
+
 		await approveJob(jobOfferID, req.user.id);
 		const answer = {
 			success: true
@@ -234,7 +258,7 @@ export const handleApproveJob = async (
 
 export const handleRejectJob = async (
 	req: FastifyRequest<{ Body: { jobOfferID: string } }>,
-	reply: FastifyReply 
+	reply: FastifyReply
 ) => {
 	try {
 		if (req.user.role !== userRoles.stuff) throw new InsufficientPermissionError();
@@ -242,12 +266,12 @@ export const handleRejectJob = async (
 		console.log("jobid: ", jobOfferID);
 		console.log(req.user.id);
 		if (!jobOfferID) {
-			return reply.status(400).send({ 
-				success: false, 
-				error: "jobOfferID is required" 
+			return reply.status(400).send({
+				success: false,
+				error: "jobOfferID is required"
 			});
 		}
-		
+
 		await rejectJob(jobOfferID, req.user.id);
 		const answer = {
 			success: true

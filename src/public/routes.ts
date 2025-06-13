@@ -66,6 +66,12 @@ export const routes: tRoutes = {
 		description: "Home page"
 	},
 
+	"/profile": {
+		template: "/templates/profile.html",
+		title: `Profile | ${APP_TITLE}`,
+		description: "User profile page"
+	},
+
 	"/settings": {
 		template: "/templates/settings/index.html",
 		title: `Settings | ${APP_TITLE}`,

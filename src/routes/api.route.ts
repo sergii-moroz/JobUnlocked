@@ -20,6 +20,9 @@ export const apiRoutes = async (app: FastifyInstance, opts: FastifyPluginOptions
 		handler: handleGetJobs
 	})
 
+	app.get('/user/42/userinfo', {
+		handler: handle42UserInfo
+	})
 
 	app.post('/update/job/offer', {
 		preHandler: [authenticate, checkCsrf],
