@@ -168,11 +168,11 @@ export class API {
 	}
 
 	static async approveOffer(id: string) {
-		const response = await this.post('/api/approve/job/offer', { id }, { includeCSRF: true })
+		const response = await this.post('/api/approve/job/offer', { jobOfferID: id })
 	}
 
 	static async rejectOffer(id: string) {
-		//
+		const response = await this.post('/api/reject/job/offer', { jobOfferID: id })
 	}
 
 	// static async getGeneralJob(page: number = 1, page_size: number = 5, job_status: jobStatus = jobStatus.approved) {

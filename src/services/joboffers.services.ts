@@ -119,3 +119,28 @@ export const addJobOffer = async (jobOffer: JobOfferRequest, user_id: string): P
 	});
 }
 
+export const approveJob = async (jobOfferID: string, user_id: string): Promise<void> => {
+	return new Promise((resolve, reject) => {
+		db.run(
+			`UPDATE jobPosts SET job_status = ?, approved_by = ?, approval_date = CURRENT_TIMESTAMP WHERE id = ?`,
+			[jobStatus.approved, user_id, jobOfferID],
+			function (err) {
+				if (err) reject(err);
+				resolve();
+			}
+		);
+	});
+}
+
+export const rejectJob = async (jobOfferID: string, user_id: string): Promise<void> => {
+	return new Promise((resolve, reject) => {
+		db.run(
+			`UPDATE jobPosts SET job_status = ?, approved_by = ?, approval_date = CURRENT_TIMESTAMP WHERE id = ?`,
+			[jobStatus.rejected, user_id, jobOfferID],
+			function (err) {
+				if (err) reject(err);
+				resolve();
+			}
+		);
+	});
+}

@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { JWTPayload } from "../types/user.types.js";
-import { addJobOffer, getJobOffersCount, getJobOffersPaginated, updateJobPost } from "../services/joboffers.services.js";
+import { addJobOffer, approveJob, getJobOffersCount, getJobOffersPaginated, rejectJob, updateJobPost } from "../services/joboffers.services.js";
 
 import { jobStatus } from "../public/types/jobOffers.types.js";
 import { JobOfferRequest } from "../public/types/job-offer.js";
@@ -114,6 +114,59 @@ export const handleGetApplications = async (
 		const applications = await getApplications(jobOfferID)
 		const answer = {
 			applications,
+			success: true
+		};
+		reply.status(200).send(answer);
+	} catch (error) {
+		console.log(`error: ${error}`);
+		reply.status(400).send({success: false});
+	}
+}
+
+
+export const handleApproveJob = async (
+	req: FastifyRequest<{ Body: { jobOfferID: string } }>,
+	reply: FastifyReply 
+) => {
+	try {
+		const { jobOfferID } = req.body;
+		console.log("jobid: ", jobOfferID);
+		console.log(req.user.id);
+		if (!jobOfferID) {
+			return reply.status(400).send({ 
+				success: false, 
+				error: "jobOfferID is required" 
+			});
+		}
+		
+		await approveJob(jobOfferID, req.user.id);
+		const answer = {
+			success: true
+		};
+		reply.status(200).send(answer);
+	} catch (error) {
+		console.log(`error: ${error}`);
+		reply.status(400).send({success: false});
+	}
+}
+
+export const handleRejectJob = async (
+	req: FastifyRequest<{ Body: { jobOfferID: string } }>,
+	reply: FastifyReply 
+) => {
+	try {
+		const { jobOfferID } = req.body;
+		console.log("jobid: ", jobOfferID);
+		console.log(req.user.id);
+		if (!jobOfferID) {
+			return reply.status(400).send({ 
+				success: false, 
+				error: "jobOfferID is required" 
+			});
+		}
+		
+		await rejectJob(jobOfferID, req.user.id);
+		const answer = {
 			success: true
 		};
 		reply.status(200).send(answer);

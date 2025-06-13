@@ -12,7 +12,7 @@ export async function up() {
 				requirements: 'c, c++, python, fastify, vanilla JS, sqlite',
 				location: 'Heilbronn',
 				type: 1,
-				job_status: 1,
+				job_status: 2,
 			},
 			{
 				uuid: "uuid-jobpost-2",
