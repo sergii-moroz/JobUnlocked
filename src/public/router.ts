@@ -22,8 +22,9 @@ export class Router {
 	static async handleRouteChange() {
 		const path = this.getSanitizedPath()
 		let route
-
-		if(path.startsWith("/application-form/")) {
+		if(path.startsWith("/applicant-list/"))
+			route = routes["/applicant-list/:"] ?? routes["404"];
+		else if(path.startsWith("/application-form/")) {
 			route = routes["/application-form/:"] ?? routes["404"];
 		}else {
 			route = routes[path] ?? routes["404"]
