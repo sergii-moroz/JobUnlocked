@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
+import { authenticate, checkCsrf } from "../controllers/auth.controllers.js"
 import { handleGetJobs, handleGetUserRole, handleJobOfferSubmit, handleStudentApplicationSubmit } from "../controllers/api.controller.js"
-import { authenticate } from "../controllers/auth.controllers.js"
+
 // import { handleGetJobOffersForStudents } from "../controllers/jobOffers.controller.js"
 
 export const apiRoutes = async (app: FastifyInstance, opts: FastifyPluginOptions) => {
@@ -17,6 +18,12 @@ export const apiRoutes = async (app: FastifyInstance, opts: FastifyPluginOptions
 		handler: handleGetJobs
 	})
 
+
+	app.post('/update/job/offer', {
+		preHandler: [authenticate, checkCsrf],
+		handler: handleUpdateJobOffer
+	})
+
 	app.post('/student/submitApplicationForm', {
 		preHandler: [authenticate],
 		handler: handleStudentApplicationSubmit
@@ -26,5 +33,6 @@ export const apiRoutes = async (app: FastifyInstance, opts: FastifyPluginOptions
 		preHandler: [authenticate],
 		handler: handleJobOfferSubmit
 	})
+
 
 }
