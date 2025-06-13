@@ -25,7 +25,12 @@ export class applicantList extends HTMLElement {
 	private render() {
 		this.innerHTML = `
 		<div class="flex gap-2 h-[calc(100dvh-64px)] mx-2">
-			<div id="applicantList" class="w-[40%] h-full overflow-y-auto space-y-2"></div>
+			<div id="applicantList" class="w-[40%] h-full overflow-y-auto space-y-2">
+				<div class="tw-list-entry p-4 text-center text-gray-500">
+					No Applications found
+				</div>
+			</div>
+
 			<div id="applicantDetails" class="w-[60%] h-full overflow-y-auto mb-4"></div>
 		</div>
 		`
@@ -98,8 +103,8 @@ export class applicantList extends HTMLElement {
 	private populateApplicantList() {
 		const root = this.querySelector('#applicantList');
 		if (!root) return;
-		root.innerHTML = ``;
-
+		if (this.applications.length > 0)
+			root.innerHTML = ``;
 
 		this.applications.forEach((applicant: applicationType) => {
 			const applicantElement = document.createElement('div');
